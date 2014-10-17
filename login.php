@@ -18,6 +18,16 @@
 				<input type="password" name="password" maxlength="30">
                 <input type="submit" name="submit" value="Login">               
             </form>
+		    <form action=signup.php method="post">
+			Signup with a new username:<br>
+			Choose a username:
+				<input type="text" name="newusername" maxlength="50"> <br>
+			Choose a password:	
+				<input type="password" name="newpassword" maxlength="30"><br>
+			Retype password:	
+				<input type="password" name="repeatpassword" maxlength="30"><br><br>
+				<button id="submit">Submit</button>
+			</form>
 			</div>
         </body>
     </html>
