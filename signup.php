@@ -30,7 +30,7 @@
 				$stmt->bind_result($cnt, $user_num, $pwd_hash);
 				$stmt->fetch();
 				$_SESSION['user_num'] = $user_num;
-				header("Location: userhome.php");
+				header("Location: calendar.html");
 				exit();
 
 			}	
