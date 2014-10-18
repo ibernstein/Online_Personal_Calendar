@@ -5,16 +5,85 @@
             <title>Welcome to Your Calendar</title>
             <link rel="stylesheet" type="text/css" href="cal.css">
 				<script type="text/javascript">
-									
+					document.addEventListener("DOMContentLoaded",function(){
+						  // get the reference for the body
+						  var body = document.getElementsByTagName("body")[0];
+						 
+						  // creates a <table> element and a <tbody> element
+						  var calendargrid     = document.createElement("table");
+						  var calendargridBody = document.createElement("tbody");
+						 
+						  // creating all cells
+						  for (var i = 0; i < 5; i++) {
+						    // creates a table row
+						    var row = document.createElement("tr");
+						 
+						    for (var j = 0; j < 7; j++) {
+						      if(i==0){
+						       var cell = document.createElement("td");
+						      if(j==0){
+						        var cellText = document.createTextNode("Sunday");
+						      }
+						      if(j==1){
+						       var cellText = document.createTextNode("Monday");
+						      }
+						      if(j==2){
+						       var cellText = document.createTextNode("Tuesday");
+						      }
+						      if(j==3){
+						       var cellText = document.createTextNode("Wednesday");
+						      }
+						      if(j==4){
+						       var cellText = document.createTextNode("Thursday");
+						      }
+						      if(j==5){
+						        var cellText = document.createTextNode("Friday");
+						      }
+						      if(j==6){
+						        var cellText = document.createTextNode("Saturday");
+						      }
+						      cell.appendChild(cellText);
+						      row.appendChild(cell);
+						      }
+						      else{
+						      // Create a <td> element and a text node, make the text
+						      // node the contents of the <td>, and put the <td> at
+						      // the end of the table row
+						      var cell = document.createElement("td");
+						      var cellText = document.createTextNode("date");
+						      cell.appendChild(cellText);
+						      row.appendChild(cell);
+						      }
+						    }
+						 
+						    // add the row to the end of the table body
+						    calendargridBody.appendChild(row);
+						  }
+						 
+						  // put the <tbody> in the <table>
+						  calendargrid.appendChild(calendargridBody);
+						  // appends <table> into <body>
+						  body.appendChild(calendargrid);
+						  // sets the border attribute of calendargrid to 3;
+						  calendargrid.setAttribute("border", "3");
+						}, false);
+
 					// For our purposes, we can keep the current month in a variable in the global scope
 					var currentMonth = new Month(2014, 9); // October 2014
 					 
-					// Change the month when the "next" button is pressed
-					document.getElementById("next_month_btn").addEventListener("click", function(event){
-						currentMonth = currentMonth.nextMonth(); // Previous month would be currentMonth.prevMonth()
+					// Change the month when the "next month" button is pressed
+					document.getElementById("nextmonth").addEventListener("click", function(event){
+						currentMonth = currentMonth.nextMonth();
 						updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
 						alert("The new month is "+currentMonth.month+" "+currentMonth.year);
 					}, false);
+					//change the month when the previous month button is pressed
+					document.getElementById("prevmonth").addEventListener("click", function(event){
+						currentMonth = currentMonth.prevMonth();
+						updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+						alert("The new month is "+currentMonth.month+" "+currentMonth.year);
+					}, false);
+
 					 
 					 
 					// This updateCalendar() function only alerts the dates in the currently specified month.  You need to write
@@ -25,7 +94,7 @@
 						for(var w in weeks){
 							var days = weeks[w].getDates();
 							// days contains normal JavaScript Date objects.
-					 
+					 		//Here is where we want to set the date for each cell 
 							alert("Week starting on "+days[0]);
 					 
 							for(var d in days){
@@ -46,22 +115,8 @@
 			</form>
 		</div>
 		<div class = "monthbuttons">
-			<input type = "submit" class = "prevmonth" value="Previous Month">
-			<input type = "submit" class = "nextmonth" value="Next Month">
+			<input type = "submit" id = "prevmonth" value="Previous Month">
+			<input type = "submit" id = "nextmonth" value="Next Month">
 		</div>
-            <div>
-			<table class="daynames">
-				<tr>
-					<th class="dayname">Sun</th>
-					<th class="dayname">Mon</th>
-					<th class="dayname">Tue</th>
-					<th class="dayname">Wed</th>
-					<th class="dayname">Thurs</th>
-					<th class="dayname">Fri</th>
-					<th class="dayname">Sat</th>
-				</tr>
-			</table>	
-			
-         <!--    make a new table that holds the days of the months and then numerates them using javascript -->
 		</body>	
 	</html>	
