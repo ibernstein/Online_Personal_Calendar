@@ -54,7 +54,7 @@ if(isset($_POST['username'])&&isset($_POST['password'])){
 	if( $cnt == 1 && crypt($pwd_guess, $pwd_hash)==$pwd_hash){
 		// Login succeeded!
 		$_SESSION['user_num'] = $user_num;
-		header("Location: calendar");
+		header("Location: calendar.html");
 		exit();
 	}
 	else{
