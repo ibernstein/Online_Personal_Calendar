@@ -4,22 +4,25 @@
         <head>
             <title>Welcome to Your Calendar</title>
             <link rel="stylesheet" type="text/css" href="cal.css">
+            	<script type="text/javascript" src="http://classes.engineering.wustl.edu/cse330/content/calendar.min.js"></script>
 				<script type="text/javascript">
+					var firstday;
 					document.addEventListener("DOMContentLoaded",function(){
 						  // get the reference for the body
 						  var body = document.getElementsByTagName("body")[0];
 						 
 						  // creates a <table> element and a <tbody> element
 						  var calendargrid     = document.createElement("table");
+						  var calendargridHead = document.createElement("thead");
 						  var calendargridBody = document.createElement("tbody");
 						 
 						  // creating all cells
-						  for (var i = 0; i < 5; i++) {
+						  for (var i = -1; i < 5; i++) {
 						    // creates a table row
 						    var row = document.createElement("tr");
 						 
 						    for (var j = 0; j < 7; j++) {
-						      if(i==0){
+						      if(i==-1){
 						       var cell = document.createElement("td");
 						      if(j==0){
 						        var cellText = document.createTextNode("Sunday");
@@ -50,9 +53,12 @@
 						      // node the contents of the <td>, and put the <td> at
 						      // the end of the table row
 						      var cell = document.createElement("td");
-						      var cellText = document.createTextNode("date");
-						      cell.appendChild(cellText);
-						      row.appendChild(cell);
+						      var weeks = currentMonth.getWeeks();
+							  var days = weeks[i].getDates();
+								 	var cellText = document.createTextNode(days[j].getDate());
+						 	   		cell.appendChild(cellText);
+						 	    	row.appendChild(cell);
+						  
 						      }
 						    }
 						 
@@ -66,13 +72,14 @@
 						  body.appendChild(calendargrid);
 						  // sets the border attribute of calendargrid to 3;
 						  calendargrid.setAttribute("border", "3");
+						  updateCalendar();
 						}, false);
 
 					// For our purposes, we can keep the current month in a variable in the global scope
 					var currentMonth = new Month(2014, 9); // October 2014
-					 
+					//firstday = new Day(2014, 9, 1);
 					// Change the month when the "next month" button is pressed
-					document.getElementById("nextmonth").addEventListener("click", function(event){
+					/*document.getElementById("nextmonth").addEventListener("click", function(event){
 						currentMonth = currentMonth.nextMonth();
 						updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
 						alert("The new month is "+currentMonth.month+" "+currentMonth.year);
@@ -82,24 +89,25 @@
 						currentMonth = currentMonth.prevMonth();
 						updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
 						alert("The new month is "+currentMonth.month+" "+currentMonth.year);
-					}, false);
-
-					 
+					}, false);*/
 					 
 					// This updateCalendar() function only alerts the dates in the currently specified month.  You need to write
 					// it to modify the DOM (optionally using jQuery) to display the days and weeks in the current month.
 					function updateCalendar(){
+
 						var weeks = currentMonth.getWeeks();
-					 
+					 	
 						for(var w in weeks){
 							var days = weeks[w].getDates();
 							// days contains normal JavaScript Date objects.
-					 		//Here is where we want to set the date for each cell 
+					 		//Here is where we want to set the date for each cell's text node
 							alert("Week starting on "+days[0]);
-					 
+					 		alert("this is the var days" + days[0]);
 							for(var d in days){
 								// You can see console.log() output in your JavaScript debugging tool, like Firebug,
 								// WebWit Inspector, or Dragonfly.
+								alert("this is also the var days" + days[d]);
+
 								console.log(days[d].toISOString());
 							}
 						}
