@@ -95,7 +95,8 @@
 					function clickCell(e) {
 					    var rows = document.getElementById('calendargrid').rows;
 					    for(var i = 0; i < rows.length; i++) {
-					        
+					       // Sample syntax for posting xmlHgp.open("POST",	"/query.cgi”,true);	
+							// xmlHgp.send("name=Bob&email=bob@example.com");	
 					    }
 					    
 					}
@@ -128,6 +129,7 @@
 
 						  // creates a <table> element and a <tbody> element
 						  var calendargrid     = document.createElement("table");
+						  calendargrid.setAttribute("id","grid");
 						  var calendargridHead = document.createElement("thead");
 						  var calendargridBody = document.createElement("tbody");
 						  var weeks = currentMonth.getWeeks();
