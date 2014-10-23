@@ -78,7 +78,8 @@
 					var currentMonth = new Month(2014, 9); // October 2014
 					//firstday = new Day(2014, 9, 1);
 					// Change the month when the "next month" button is pressed
-/*					document.getElementById("nextmonth").addEventListener("click", function(event){
+					document.addEventListener("DOMContentLoaded",function(){
+					document.getElementById("nextmonth").addEventListener("click", function(event){
 						currentMonth = currentMonth.nextMonth();
 						updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
 						alert("The new month is "+currentMonth.month+" "+currentMonth.year);
@@ -88,8 +89,8 @@
 						currentMonth = currentMonth.prevMonth();
 						updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
 						alert("The new month is "+currentMonth.month+" "+currentMonth.year);
-					}, false);*/
-					 
+					}, false);
+					}, false);
 					// This updateCalendar() function only alerts the dates in the currently specified month.  You need to write
 					// it to modify the DOM (optionally using jQuery) to display the days and weeks in the current month.
 					function updateCalendar(){
