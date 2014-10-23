@@ -9,7 +9,7 @@
 					document.addEventListener("DOMContentLoaded",function(){
 						  // get the reference for the body
 						  var body = document.getElementsByTagName("body")[0];
-						 
+						  document.getElementById("monthNameTag").innerHTML=currentMonth;
 						  // creates a <table> element and a <tbody> element
 						  var calendargrid     = document.createElement("table");
 						  calendargrid.setAttribute("id","grid");
@@ -90,6 +90,18 @@
 						updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
 						alert("The new month is "+currentMonth.month+" "+currentMonth.year);
 					}, false);
+
+					//If a box is clicked on, give the option to add an event
+					function clickCell(e) {
+					    var rows = document.getElementById('calendargrid').rows;
+					    for(var i = 0; i < rows.length; i++) {
+					        
+					    }
+					    
+					}
+
+
+
 					}, false);
 					// This updateCalendar() function only alerts the dates in the currently specified month.  You need to write
 					// it to modify the DOM (optionally using jQuery) to display the days and weeks in the current month.
@@ -108,18 +120,18 @@
 								//console.log(days[d].toISOString());
 							}
 						}
-						var monthText = document.createElement("p");
-						monthName = document.createTextNode(currentMonth);
-						monthText.appendChild(monthName);
+
 						  // get the reference for the body
 						 var body = document.getElementsByTagName("body")[0];
 						//if there is already a calendar grid there, remove it
 						 if (document.getElementById("grid")) document.getElementById("grid").remove();
+
 						  // creates a <table> element and a <tbody> element
 						  var calendargrid     = document.createElement("table");
 						  var calendargridHead = document.createElement("thead");
 						  var calendargridBody = document.createElement("tbody");
 						  var weeks = currentMonth.getWeeks();
+						  document.getElementById("monthNameTag").innerHTML=currentMonth;			
 						  // creating all cells based on the number of weeks
 						  for (var i = -1; i < weeks.length; i++) {
 						    // creates a table row
@@ -179,6 +191,7 @@
 				</script>
         </head>
         <body>
+        <div class="main">	
 		<div class="logoutbtn">
 			<form method="post" action="logout.php">
 				<label class="logout">
@@ -190,5 +203,8 @@
 			<input type = "submit" id = "prevmonth" value="Previous Month">
 			<input type = "submit" id = "nextmonth" value="Next Month">
 		</div>
+		<p id="instructions">Click on a date below to add an event</p>
+		<p id="monthNameTag"></p>
+	</div>
 		</body>	
 	</html>	
