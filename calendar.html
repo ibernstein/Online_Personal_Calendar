@@ -6,7 +6,6 @@
             <link rel="stylesheet" type="text/css" href="cal.css">
             	<script type="text/javascript" src="http://classes.engineering.wustl.edu/cse330/content/calendar.min.js"></script>
 				<script type="text/javascript">
-					var firstday;
 					document.addEventListener("DOMContentLoaded",function(){
 						  // get the reference for the body
 						  var body = document.getElementsByTagName("body")[0];
@@ -18,7 +17,7 @@
 						  var calendargridBody = document.createElement("tbody");
 						 
 						  // creating all cells
-						  for (var i = -1; i < 5; i++) {
+						  for (var i = -1; i < currentMonth.getWeeks().length; i++) {
 						    // creates a table row
 						    var row = document.createElement("tr");
 						 
@@ -114,13 +113,14 @@
 						monthText.appendChild(monthName);
 						  // get the reference for the body
 						 var body = document.getElementsByTagName("body")[0];
+						//if there is already a calendar grid there, remove it
 						 if (document.getElementById("grid")) document.getElementById("grid").remove();
 						  // creates a <table> element and a <tbody> element
 						  var calendargrid     = document.createElement("table");
 						  var calendargridHead = document.createElement("thead");
 						  var calendargridBody = document.createElement("tbody");
 						  var weeks = currentMonth.getWeeks();
-						  // creating all cells
+						  // creating all cells based on the number of weeks
 						  for (var i = -1; i < weeks.length; i++) {
 						    // creates a table row
 						    var row = document.createElement("tr");
