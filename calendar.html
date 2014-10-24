@@ -21,13 +21,13 @@
 					month[11] = "December";
 					document.addEventListener("DOMContentLoaded",function(){
 						  // get the reference for the body
-						  var body = document.getElementsByTagName("body")[0];
-						  document.getElementById("monthNameTag").innerHTML= month[currentMonth.month] + ", " + currentMonth.year;
+						  var body = document.getElementsByTagName("body")[0];					  
 						  // creates a <table> element and a <tbody> element
 						  var calendargrid     = document.createElement("table");
 						  calendargrid.setAttribute("id","grid");
 						  var calendargridHead = document.createElement("thead");
-						  var calendargridBody = document.createElement("tbody");
+						  var calendargridBody = document.createElement("tbody");					     
+						  calendargridHead = document.createTextNode(month[currentMonth.month] + ", " + currentMonth.year);
 						 
 						  // creating all cells
 						  for (var i = -1; i < currentMonth.getWeeks().length; i++) {
@@ -68,9 +68,16 @@
 						      var cell = document.createElement("td");
 						      var weeks = currentMonth.getWeeks();
 							  var days = weeks[i].getDates();
-								 	var cellText = document.createTextNode(days[j].getDate());
-						 	   		cell.appendChild(cellText);
-						 	    	row.appendChild(cell);
+								if(days[j].getMonth() == currentMonth.month){	
+								    var cellText = document.createTextNode(days[j].getDate());
+								    cell.appendChild(cellText);
+								    row.appendChild(cell);
+								}
+								else{
+								    var cellText = document.createTextNode("");
+								    cell.appendChild(cellText);
+								    row.appendChild(cell); 
+								}
 						  
 						      }
 						    }
@@ -78,7 +85,7 @@
 						    // add the row to the end of the table body
 						    calendargridBody.appendChild(row);
 						  }
-						 
+						  calendargrid.appendChild(calendargridHead);
 						  // put the <tbody> in the <table>
 						  calendargrid.appendChild(calendargridBody);
 						  // appends <table> into <body>
@@ -95,13 +102,13 @@
 					document.getElementById("nextmonth").addEventListener("click", function(event){
 						currentMonth = currentMonth.nextMonth();
 						updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
-						alert("The new month is "+currentMonth.month+" "+currentMonth.year);
+						//alert("The new month is "+currentMonth.month+" "+currentMonth.year);
 					}, false);
 					//change the month when the previous month button is pressed
 					document.getElementById("prevmonth").addEventListener("click", function(event){
 						currentMonth = currentMonth.prevMonth();
 						updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
-						alert("The new month is "+currentMonth.month+" "+currentMonth.year);
+						//alert("The new month is "+currentMonth.month+" "+currentMonth.year);
 					}, false);
 
 					//If a box is clicked on, give the option to add an event
@@ -146,7 +153,7 @@
 						  var calendargridHead = document.createElement("thead");
 						  var calendargridBody = document.createElement("tbody");
 						  var weeks = currentMonth.getWeeks();
-						  document.getElementById("monthNameTag").innerHTML=month[currentMonth.month] + ", " + currentMonth.year;;			
+						  calendargridHead = document.createTextNode(month[currentMonth.month] + ", " + currentMonth.year);			
 						  // creating all cells based on the number of weeks
 						  for (var i = -1; i < weeks.length; i++) {
 						    // creates a table row
@@ -185,17 +192,24 @@
 						      // the end of the table row
 						      var cell = document.createElement("td");
 							  var days = weeks[i].getDates();
-								 	var cellText = document.createTextNode(days[j].getDate());
-						 	   		cell.appendChild(cellText);
-						 	    	row.appendChild(cell);
-						  
+							    if(days[j].getMonth() == currentMonth.month){	
+								var cellText = document.createTextNode(days[j].getDate());
+								cell.appendChild(cellText);
+								row.appendChild(cell);
+							    }
+							    else{
+								var cellText = document.createTextNode("");
+								cell.appendChild(cellText);
+								row.appendChild(cell); 
+							    }
 						      }
 						    }
 						 
 						    // add the row to the end of the table body
 						    calendargridBody.appendChild(row);
 						  }
-						 
+						  // put the <thead> in the <table>
+						  calendargrid.appendChild(calendargridHead);
 						  // put the <tbody> in the <table>
 						  calendargrid.appendChild(calendargridBody);
 						  // appends <table> into <body>
@@ -210,7 +224,7 @@
 		<div class="logoutbtn">
 			<form method="post" action="logout.php">
 				<label class="logout">
-				<input type="submit" id="logout" value="log out">
+				<input type="submit" id="logout" value="Log Out">
 				</label>
 			</form>
 		</div>
@@ -219,7 +233,6 @@
 			<input type = "submit" id = "nextmonth" value="Next Month">
 		</div>
 		<p id="instructions">Click on a date below to add an event</p>
-		<p id="monthNameTag"></p>
 	</div>
 		</body>	
 	</html>	
