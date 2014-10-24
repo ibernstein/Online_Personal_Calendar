@@ -6,10 +6,23 @@
             <link rel="stylesheet" type="text/css" href="cal.css">
             	<script type="text/javascript" src="http://classes.engineering.wustl.edu/cse330/content/calendar.min.js"></script>
 				<script type="text/javascript">
+					var month = new Array();
+					month[0] = "January";
+					month[1] = "February";
+					month[2] = "March";
+					month[3] = "April";
+					month[4] = "May";
+					month[5] = "June";
+					month[6] = "July";
+					month[7] = "August";
+					month[8] = "September";
+					month[9] = "October";
+					month[10] = "November";
+					month[11] = "December";
 					document.addEventListener("DOMContentLoaded",function(){
 						  // get the reference for the body
 						  var body = document.getElementsByTagName("body")[0];
-						  document.getElementById("monthNameTag").innerHTML=currentMonth;
+						  document.getElementById("monthNameTag").innerHTML= month[currentMonth.month] + ", " + currentMonth.year;
 						  // creates a <table> element and a <tbody> element
 						  var calendargrid     = document.createElement("table");
 						  calendargrid.setAttribute("id","grid");
@@ -114,7 +127,7 @@
 							var days = weeks[w].getDates();
 							// days contains normal JavaScript Date objects.
 					 		//Here is where we want to set the date for each cell's text node
-							alert("Week starting on "+days[0]);
+							//alert("Week starting on "+days[0]);
 							for(var d in days){
 								// You can see console.log() output in your JavaScript debugging tool, like Firebug,
 								// WebWit Inspector, or Dragonfly.
@@ -133,7 +146,7 @@
 						  var calendargridHead = document.createElement("thead");
 						  var calendargridBody = document.createElement("tbody");
 						  var weeks = currentMonth.getWeeks();
-						  document.getElementById("monthNameTag").innerHTML=currentMonth;			
+						  document.getElementById("monthNameTag").innerHTML=month[currentMonth.month] + ", " + currentMonth.year;;			
 						  // creating all cells based on the number of weeks
 						  for (var i = -1; i < weeks.length; i++) {
 						    // creates a table row
