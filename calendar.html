@@ -141,6 +141,59 @@
 					 			inputelement.setAttribute("name", "eventTitle");
 					 			createform.appendChild(inputelement);
 
+					 			var linebreak = document.createElement('br');
+					 			createform.appendChild(linebreak);
+
+								var startTimeLabel = document.createElement('label'); // Create Label for Event Title Field
+					 			startTimeLabel.innerHTML = "Event Start Time : "; // Set Field Labels
+					 			createform.appendChild(startTimeLabel);
+
+					 			var inputelement = document.createElement('input'); // Create Input Field for Event Title
+					 			inputelement.setAttribute("type", "datetime-local");
+					 			inputelement.setAttribute("name", "eventStart");
+					 			createform.appendChild(inputelement);
+
+					 			var linebreak = document.createElement('br');
+					 			createform.appendChild(linebreak);
+
+								var endTimeLabel = document.createElement('label'); // Create Label for Event Title Field
+					 			endTimeLabel.innerHTML = "Event End Time : "; // Set Field Labels
+					 			createform.appendChild(endTimeLabel);
+
+					 			var inputelement = document.createElement('input'); // Create Input Field for Event Title
+					 			inputelement.setAttribute("type", "datetime-local");
+					 			inputelement.setAttribute("name", "eventEnd");
+					 			createform.appendChild(inputelement);
+
+					 			var linebreak = document.createElement('br');
+					 			createform.appendChild(linebreak);
+
+								var catlabel = document.createElement('label'); // Create Label for Event Title Field
+					 			catlabel.innerHTML = "Categroy : "; // Set Field Labels
+					 			createform.appendChild(catlabel);
+
+					 			var inputelement = document.createElement('input'); // Create Input Field for Event Title
+					 			inputelement.setAttribute("type", "radio");
+					 			inputelement.setAttribute("name", "cat");
+								inputelement.setAttribute("value", "work");
+					 			createform.appendChild(inputelement);
+					 			var inputelement = document.createElement('input'); // Create Input Field for Event Title
+					 			inputelement.setAttribute("type", "radio");
+					 			inputelement.setAttribute("name", "cat");
+								inputelement.setAttribute("value", "personal");
+					 			createform.appendChild(inputelement);
+					 			var inputelement = document.createElement('input'); // Create Input Field for Event Title
+					 			inputelement.setAttribute("type", "radio");
+					 			inputelement.setAttribute("name", "cat");
+								inputelement.setAttribute("value", "social");
+					 			createform.appendChild(inputelement);
+					 			var inputelement = document.createElement('input'); // Create Input Field for Event Title
+					 			inputelement.setAttribute("type", "radio");
+					 			inputelement.setAttribute("name", "cat");
+								inputelement.setAttribute("value", "other");
+					 			createform.appendChild(inputelement);
+
+
 					 			var submitelement = document.createElement('input');
 					 			// Append Submit Button
 					 			submitelement.setAttribute("type", "submit");
