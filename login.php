@@ -67,7 +67,6 @@ if(isset($_POST['username'])&&isset($_POST['password'])){
 	else{
 		//login failed
 		echo "Login failed. Try again.";
-		header("Location: login.php");
 	}
 }
 ?>
