@@ -37,7 +37,7 @@
 			
 		}
 		else{ 
-			header("Location: login.php");
+			echo "Signup failed. Try again.";
 			exit();
 		}
 	}
