@@ -174,6 +174,7 @@
 			 			createform.appendChild(workLabel);
 			 			var inputelement4 = document.createElement('input'); 
 			 			inputelement4.setAttribute("type", "radio");
+						inputelement4.setAttribute("id", "Work");
 			 			inputelement4.setAttribute("name", "cat");
 						inputelement4.setAttribute("value", "w");
 			 			createform.appendChild(inputelement4);
@@ -183,65 +184,76 @@
 						var personalLabel = document.createElement('label'); 
 			 			personalLabel.innerHTML = "Personal"; 
 			 			createform.appendChild(personalLabel);
-			 			var inputelement4 = document.createElement('input');
-			 			inputelement4.setAttribute("type", "radio");
-			 			inputelement4.setAttribute("name", "cat");
-						inputelement4.setAttribute("value", "p");
-			 			createform.appendChild(inputelement4);
+			 			var inputelement5 = document.createElement('input');
+			 			inputelement5.setAttribute("type", "radio");
+						inputelement5.setAttribute("id", "Personal");
+			 			inputelement5.setAttribute("name", "cat");
+						inputelement5.setAttribute("value", "p");
+			 			createform.appendChild(inputelement5);
 			 			var linebreak = document.createElement('br');
 			 			createform.appendChild(linebreak);
 
 						var socialLabel = document.createElement('label'); 
 			 			socialLabel.innerHTML = "Social"; 
 			 			createform.appendChild(socialLabel);
-			 			var inputelement4 = document.createElement('input'); 
-			 			inputelement4.setAttribute("type", "radio");
-			 			inputelement4.setAttribute("name", "cat");
-						inputelement4.setAttribute("value", "s");
-			 			createform.appendChild(inputelement4);
+			 			var inputelement6 = document.createElement('input'); 
+			 			inputelement6.setAttribute("type", "radio");
+						inputelement6.setAttribute("id", "Social");
+			 			inputelement6.setAttribute("name", "cat");
+						inputelement6.setAttribute("value", "s");
+			 			createform.appendChild(inputelement6);
 			 			var linebreak = document.createElement('br');
 			 			createform.appendChild(linebreak);
 
 						var otherLabel = document.createElement('label'); 
 			 			otherLabel.innerHTML = "Other"; 
 			 			createform.appendChild(otherLabel);
-			 			var inputelement4 = document.createElement('input'); 
-			 			inputelement4.setAttribute("type", "radio");
-			 			inputelement4.setAttribute("name", "cat");
-						inputelement4.setAttribute("value", "o");
-			 			createform.appendChild(inputelement4);
+			 			var inputelement7 = document.createElement('input'); 
+			 			inputelement7.setAttribute("type", "radio");
+						inputelement7.setAttribute("id", "Other");
+			 			inputelement7.setAttribute("name", "cat");
+						inputelement7.setAttribute("value", "o");
+			 			createform.appendChild(inputelement7);
+						var linebreak = document.createElement('br');
+			 			createform.appendChild(linebreak);
 
 
 			 			var submitelement = document.createElement('input');
 			 			// Append Submit Button
-			 			submitelement.setAttribute("type", "submit");
+			 			submitelement.setAttribute("type", "button");
 			 			submitelement.setAttribute("name", "submit");
-			 			submitelement.setAttribute("value", "Submit");
 			 			submitelement.addEventListener("click", function(event){
-			 				var dataString = "name=" + encodeURIComponent(inputelement.value) + "start=" + encodeURIComponent(inputelement2.value) + "end=" + encodeURIComponent(inputelement3.value) + "cat" + encodeURIComponent(inputelement4.value);
+							$cat = null;
+							if (document.getElementById("Work").checked) {
+							   $cat = "w"; 
+							}
+							else if (document.getElementById("Personal").checked) {
+							   $cat = "p"; 
+							}
+							else if (document.getElementById("Social").checked) {
+							   $cat = "s"; 
+							}
+							else if (document.getElementById("Other").checked) {
+							   $cat = "o"; 
+							}
+			 				var dataString = "name=" + encodeURIComponent(inputelement.value) + "&start=" + encodeURIComponent(inputelement2.value) + "&end=" + encodeURIComponent(inputelement3.value) + "&cat=" + encodeURIComponent($cat);
 
-				 			alert(dataString);
-	 
+				 			//alert(dataString);
 				 			var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
 							xmlHttp.open("POST", "newevent.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
 							xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
 							xmlHttp.addEventListener("load", function(event){
-								console.log(event.target.responseText);
-								var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
-								if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
-									alert("Success!");
-								}else{
-									//alert("You were not logged in.  "+jsonData.message);
-								}
+							    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+							    if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+							    	alert("Success!");
+							    }else{
+			    					alert("Event not added because:  "+ jsonData.message);
+							    }
 							}, false); // Bind the callback to the load event
 							xmlHttp.send(dataString); // Send the data
 			 			})
 			 			createform.appendChild(submitelement);
 
-			 			alert(inputelement.value);
-			 			alert(inputelement2.value);
-			 			alert(inputelement3.value);
-			 			alert(inputelement4.value);
 			 			
 			 			
 
@@ -253,7 +265,7 @@
 					function clickCell() {
 						//here is where we will call to the database the display the events for that date based on the categroies selected 
 					 			
-					       // Sample syntax for posting xmlHgp.open("POST",	"/query.cgi‚Äù,true);	
+					       // Sample syntax for posting xmlHgp.open("POST",	"/query.cgi”,true);	
 							// xmlHgp.send("name=Bob&email=bob@example.com");
 					}
 					function newEvent(){
@@ -353,7 +365,7 @@
 			</form>
 		</div>
 		<div class = "monthbuttons">
-			<input type="button" id = "prevmonth" value="Previous Month">
+			<button id = "prevmonth">Previous Month</button> 
 			<button id = "nextmonth">Next Month</button>
 		</div>
 			<button id = "newevent">Create a new event</button>
