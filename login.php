@@ -4,17 +4,17 @@
         <head>
             <title>Welcome to Your Calendar</title>
 
-             <!-- Bootstrap core CSS -->
-   			<link href="core.css" rel="stylesheet">
+		<!-- Bootstrap core CSS -->
+   		<link href="core.css" rel="stylesheet">
 
-   			 <!-- Custom styles for this template -->
+   		<!-- Custom styles for this template -->
     		<link href="signinstyle.css" rel="stylesheet">
-			<script type="text/javascript">
-			//copy the create and navigate calendar here 
-			</script> 
+		    <script type="text/javascript">
+		    //copy the create and navigate calendar here 
+		    </script> 
         </head>
         <body>
-
+	
         	   <div class="container">
 
 			      <form class="form-signin" action="login.php" method="post">
@@ -61,7 +61,7 @@ if(isset($_POST['username'])&&isset($_POST['password'])){
 	if( $cnt == 1 && crypt($pwd_guess, $pwd_hash)==$pwd_hash){
 		// Login succeeded!
 		$_SESSION['user_num'] = $user_num;
-		header("Location: calendar.php");
+		header("Location: calendar.html");
 		exit();
 	}
 	else{

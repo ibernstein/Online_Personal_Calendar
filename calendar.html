@@ -251,7 +251,7 @@ session_start();
 				xmlHttp.addEventListener("load", function(event){
 				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				    if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
-					//alert("Success!");
+					alert("Success!");
 				    }else{
 					alert("Event not added because:  "+ jsonData.message);
 				    }
@@ -265,7 +265,7 @@ session_start();
 			    createform.appendChild(submitelement);
 			    createform.appendChild(cancelelement);
 			}, false);
-			document.getElementById("work").addEventListener("onChange", function(event){
+			/*document.getElementById("work").addEventListener("onChange", function(event){
 			    //not quite working
 				var dataString = "category=" + "w";
 				var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
@@ -282,7 +282,7 @@ session_start();
 				}, false); // Bind the callback to the load event
 				xmlHttp.send(dataString); // Send the data
 				updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
-			}, false);
+			}, false);*/
 			
 		    },false);
 		    //If a box is clicked on, give the option to add an event
