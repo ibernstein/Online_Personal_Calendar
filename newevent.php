@@ -1,11 +1,12 @@
 <?php
 	session_start();
 	require 'database.php';
+	
 	//check session id
 	header("Content-Type: application/json");
 	if(isset($_POST['name'])&&isset($_POST['start'])&&isset($_POST['cat'])){
 		
-		$stmt = $mysqli->prepare("INSERT INTO events (name, start, end, category) VALUES (?, ?, ?, ?)");
+		$stmt = $mysqli->prepare("INSERT INTO events (user_id, name, start, end, category) VALUES (?, ?, ?, ?, ?)");
 		if(!$stmt){
 			printf("Query Prep Failed: %s\n", $mysqli->error);
 			echo json_encode(array(
@@ -15,7 +16,7 @@
 			exit;
 		}
 		
-		$stmt->bind_param('ssss', $_POST['name'], $_POST['start'], $_POST['end'], $_POST['cat']); 
+		$stmt->bind_param('issss', $_SESSION['user_num'], $_POST['name'], $_POST['start'], $_POST['end'], $_POST['cat']); 
 		$stmt->execute();
 		$stmt->close();
 	
