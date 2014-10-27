@@ -30,14 +30,14 @@
 				$stmt->bind_result($cnt, $user_num, $pwd_hash);
 				$stmt->fetch();
 				$_SESSION['user_num'] = $user_num;
-				header("Location: calendar.html");
+				header("Location: calendar.php");
 				exit();
 
 			}	
 			
 		}
 		else{ 
-			echo "Signup failed. Try again.";
+			echo("Signup Failed- try again");
 			exit();
 		}
 	}
