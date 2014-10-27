@@ -74,7 +74,7 @@ session_start();
 					  if(days[j].getMonth() == currentMonth.month){	
 					      var cellText = document.createTextNode(days[j].getDate());
 					      cell.addEventListener("click", clickCell, false);
-    
+    					 cell.setAttribute("style", "cursor: pointer");
 					      cell.appendChild(cellText);
 					      row.appendChild(cell);
 					  }
@@ -287,10 +287,30 @@ session_start();
 		    },false);
 		    //If a box is clicked on, give the option to add an event
 		    function clickCell() {
-			    //here is where we will call to the database the display the events for that date based on the categroies selected 
-					    
-			   // Sample syntax for posting xmlHgp.open("POST",	"/query.cgi�,true);	
-				    // xmlHgp.send("name=Bob&email=bob@example.com");
+		    	var x = document.getElementById("ModifyEventForm");
+				document.getElementById("ModifyEventForm").style.display="none";
+				var createform = document.createElement("form"); // Create New Element Form
+				x.appendChild(createform);
+				var heading = document.createElement('h2'); // Heading of Form
+				heading.innerHTML = "Modify Your Events for the Selected Date";
+				createform.appendChild(heading);
+
+		    	var editElement = document.createElement('input');
+				editElement.setAttribute("type", "submit");
+				editElement.setAttribute("name", "submit");
+				editElement.setAttribute("value", "Edit Event");
+				editElement.addEventListener("click", function(event){
+					//pop up the same form for adding an element and do all the same stuff
+			    },false);
+
+				var deleteelement = document.createElement('input');
+				deleteelement.setAttribute("type", "submit");
+				deleteelement.setAttribute("name", "submit");
+				deleteelement.setAttribute("value", "Delete Event");
+				editElement.addEventListener("click", function(event){
+					//send to a php to drop from the table 
+			    },false);
+				
 		    }
 		    // This updateCalendar() function only alerts the dates in the currently specified month.  You need to write
 		    // it to modify the DOM (optionally using jQuery) to display the days and weeks in the current month.
@@ -350,6 +370,7 @@ session_start();
 				    if(days[j].getMonth() == currentMonth.month){	
 					var cellText = document.createTextNode(days[j].getDate());
 					cell.setAttribute("onclick", clickCell, false);
+    				cell.setAttribute("style", "cursor: pointer");
 					cell.appendChild(cellText);
 					row.appendChild(cell);
 					
@@ -394,6 +415,8 @@ session_start();
 		</div>
 		<p id="instructions">Click on a date below to see the events on that day</p>
 		<div id="newEventForm">
+		</div>
+		<div id="ModifyEventForm">
 		</div>
 		<form>
 		    <input type="checkbox" name="categories" id = "work" value="w">Work
