@@ -37,7 +37,7 @@
 			
 		}
 		else{ 
-			header("Location: signupfail.html");
+			header("Location: login.php");
 			exit();
 		}
 	}
