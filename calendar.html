@@ -1,4 +1,6 @@
-<?php session_start();?>
+<?php
+session_start();
+?>
 <!DOCTYPE html>
     <html lang=en>
         <head>
@@ -99,6 +101,7 @@
     
 			// For our purposes, we can keep the current month in a variable in the global scope
 		    var currentMonth = new Month(2014, 9); // October 2014
+		    
 		    //firstday = new Day(2014, 9, 1);
 		    // Change the month when the "next month" button is pressed
 		    document.addEventListener("DOMContentLoaded",function(){
@@ -217,42 +220,70 @@
 			submitelement.setAttribute("type", "submit");
 			submitelement.setAttribute("name", "submit");
 			submitelement.setAttribute("value", "Add Event");
+			var cancelelement = document.createElement('input');
+			// Append Cancel Button
+			cancelelement.setAttribute("type", "submit");
+			cancelelement.setAttribute("name", "submit");
+			cancelelement.setAttribute("value", "Cancel");
 			createform.appendChild(linebreak);
 			document.getElementById("newevent").addEventListener("click", function(event){
 			    document.getElementById("newEventForm").style.display="block";
 			    submitelement.addEventListener("click", function(event){
-				    $cat = null;
-				    if (document.getElementById("Work").checked) {
-				       $cat = "w"; 
+				$cat = null;
+				if (document.getElementById("Work").checked) {
+				   $cat = "w"; 
+				}
+				else if (document.getElementById("Personal").checked) {
+				   $cat = "p"; 
+				}
+				else if (document.getElementById("Social").checked) {
+				   $cat = "s"; 
+				}
+				else if (document.getElementById("Other").checked) {
+				   $cat = "o"; 
+				}
+				var dataString = "name=" + encodeURIComponent(inputelement.value) + "&start=" + encodeURIComponent(inputelement2.value) + "&end=" + encodeURIComponent(inputelement3.value) + "&cat=" + encodeURIComponent($cat);
+
+				//alert(dataString);
+				var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+				xmlHttp.open("POST", "newevent.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+				xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
+				xmlHttp.addEventListener("load", function(event){
+				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+				    if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+					//alert("Success!");
+				    }else{
+					alert("Event not added because:  "+ jsonData.message);
 				    }
-				    else if (document.getElementById("Personal").checked) {
-				       $cat = "p"; 
-				    }
-				    else if (document.getElementById("Social").checked) {
-				       $cat = "s"; 
-				    }
-				    else if (document.getElementById("Other").checked) {
-				       $cat = "o"; 
-				    }
-				    var dataString = "name=" + encodeURIComponent(inputelement.value) + "&start=" + encodeURIComponent(inputelement2.value) + "&end=" + encodeURIComponent(inputelement3.value) + "&cat=" + encodeURIComponent($cat);
-    
-				    alert(dataString);
-				    var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
-				    xmlHttp.open("POST", "newevent.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
-				    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
-				    xmlHttp.addEventListener("load", function(event){
-					var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
-					if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
-					    alert("Success!");
-					}else{
-					    alert("Event not added because:  "+ jsonData.message);
-					}
-				    }, false); // Bind the callback to the load event
-				    xmlHttp.send(dataString); // Send the data
-				    document.getElementById("newEventForm").style.display="none";
+				}, false); // Bind the callback to the load event
+				xmlHttp.send(dataString); // Send the data
+				document.getElementById("newEventForm").style.display="none";
 			    })
+			    cancelelement.addEventListener("click", function(event){
+				document.getElementById("newEventForm").style.display="none";
+			    },false);
 			    createform.appendChild(submitelement);
-			}, false);		  
+			    createform.appendChild(cancelelement);
+			}, false);
+			document.getElementById("work").addEventListener("click", function(event){
+				/*<?php
+				    $stmt = $mysqli->prepare("select name, start, end from stories where category=?");
+				    if(!$stmt){
+					printf("Query Prep Failed: %s\n", $mysqli->error);
+					exit;
+				    } 
+				    $category = 'w';
+				    $stmt->bind_param('s', $category);
+				    $stmt->execute();
+				    $stmt->bind_result($name, $start, $end);
+				    while($stmt->fetch()){
+					    printf("%s", htmlspecialchars($name));
+				    }
+				    $stmt->close();
+				?>*/
+				updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+			}, false);
+			
 		    },false);
 		    //If a box is clicked on, give the option to add an event
 		    function clickCell() {
@@ -318,9 +349,10 @@
 				    var days = weeks[i].getDates();
 				    if(days[j].getMonth() == currentMonth.month){	
 					var cellText = document.createTextNode(days[j].getDate());
-					cell.addEventListener("click", clickCell, false);
+					cell.setAttribute("onclick", clickCell, false);
 					cell.appendChild(cellText);
 					row.appendChild(cell);
+					
 				    }
 				    else{
 					var cellText = document.createTextNode("");
@@ -363,6 +395,12 @@
 		<p id="instructions">Click on a date below to see the events on that day</p>
 		<div id="newEventForm">
 		</div>
+		<form>
+		    <input type="checkbox" name="categories" id = "work" value="w">Work
+		    <input type="checkbox" name="categories" id = "personal" value="p">Personal
+		    <input type="checkbox" name="categories" id = "social" value="s">Social
+		    <input type="checkbox" name="categories" id = "other" value="o">Other
+		</form>
 	</div>
 		</body>	
 	</html>	
