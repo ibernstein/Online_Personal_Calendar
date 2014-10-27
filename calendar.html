@@ -1,6 +1,4 @@
-<?php
-session_start();
-?>
+
 <!DOCTYPE html>
     <html lang=en>
         <head>
@@ -72,11 +70,11 @@ session_start();
 				var weeks = currentMonth.getWeeks();
 				    var days = weeks[i].getDates();
 					  if(days[j].getMonth() == currentMonth.month){	
-					    var cellText = document.createTextNode(days[j].getDate());
-					    cell.addEventListener("click", clickCell, false);
-					    cell.setAttribute("style", "cursor: pointer");
-					    cell.appendChild(cellText);
-					    row.appendChild(cell);
+					      var cellText = document.createTextNode(days[j].getDate());
+					      cell.addEventListener("click", clickCell, false);
+    					 cell.setAttribute("style", "cursor: pointer");
+					      cell.appendChild(cellText);
+					      row.appendChild(cell);
 					  }
 					  else{
 					      var cellText = document.createTextNode("");
@@ -105,7 +103,6 @@ session_start();
 		    //firstday = new Day(2014, 9, 1);
 		    // Change the month when the "next month" button is pressed
 		    document.addEventListener("DOMContentLoaded",function(){
-			document.getElementById("work").addEventListener("onchange", checkboxClicked, false);
 			document.getElementById("nextmonth").addEventListener("click", function(event){
 				currentMonth = currentMonth.nextMonth();
 				updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
@@ -267,59 +264,59 @@ session_start();
 			    createform.appendChild(cancelelement);
 			}, false);
 			
-		    },false);
+			document.getElementById("work").addEventListener("change",checkboxClicked, false);
+		    }, false);	
 		    //If a box is clicked on, give the option to add an event
 		    function clickCell() {
-			//here is where we will call to the database the display the events for that date based on the categroies selected 
-				    // Sample syntax for posting xmlHgp.open("POST",	"/query.cgi�,true);	
-				    // xmlHgp.send("name=Bob&email=bob@example.com");
 		    	var x = document.getElementById("ModifyEventForm");
-			document.getElementById("ModifyEventForm").style.display="none";
-			var createform = document.createElement("form"); // Create New Element Form
-			x.appendChild(createform);
-			var heading = document.createElement('h2'); // Heading of Form
-			heading.innerHTML = "Modify Your Events for the Selected Date";
-			createform.appendChild(heading);
+				document.getElementById("ModifyEventForm").style.display="none";
+				var createform = document.createElement("form"); // Create New Element Form
+				x.appendChild(createform);
+				var heading = document.createElement('h2'); // Heading of Form
+				heading.innerHTML = "Modify Your Events for the Selected Date";
+				createform.appendChild(heading);
 
 		    	var editElement = document.createElement('input');
-			    editElement.setAttribute("type", "submit");
-			    editElement.setAttribute("name", "submit");
-			    editElement.setAttribute("value", "Edit Event");
-			    editElement.addEventListener("click", function(event){
-				    //pop up the same form for adding an element and do all the same stuff
-			},false);
+				editElement.setAttribute("type", "submit");
+				editElement.setAttribute("name", "submit");
+				editElement.setAttribute("value", "Edit Event");
+				editElement.addEventListener("click", function(event){
+					//pop up the same form for adding an element and do all the same stuff
+			    },false);
 
-			var deleteelement = document.createElement('input');
-			    deleteelement.setAttribute("type", "submit");
-			    deleteelement.setAttribute("name", "submit");
-			    deleteelement.setAttribute("value", "Delete Event");
-			    editElement.addEventListener("click", function(event){
-				    //send to a php to drop from the table 
-			},false);
-
+				var deleteelement = document.createElement('input');
+				deleteelement.setAttribute("type", "submit");
+				deleteelement.setAttribute("name", "submit");
+				deleteelement.setAttribute("value", "Delete Event");
+				editElement.addEventListener("click", function(event){
+					//send to a php to drop from the table 
+			    },false);
+				
 		    }
 		    function checkboxClicked(){
-			alert("hello");
-				/*if (document.getElementById("work").checked) {
-				    var dataString = "category=" + "w";
-				}
-				else{
-				    var dataString = "category=" + "";
-				}
-				var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
-				xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
-				xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
-				xmlHttp.addEventListener("load", function(event){
-				    alert(JSON.parse(event.target.responseText));
-				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
-				    if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
-					//alert("Success!");
-				    }else{
-					alert("Event not added because:  "+ jsonData.message);
-				    }
-				}, false); // Bind the callback to the load event
-				xmlHttp.send(dataString); // Send the data
-				updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML*/
+			console.log("hello2");
+			var dataString;
+			if (document.getElementById("work").checked) {
+			    dataString = "category=" + encodeURIComponent("w");
+			    console.log(dataString);
+			}
+			else{
+			    dataString = "category=" + "";
+			}
+			var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+			xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+			xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
+			xmlHttp.addEventListener("load", function(event){
+			    console.log(JSON.parse(event.target.responseText));
+			    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+			    if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+				//alert("Success!");
+			    }else{
+				alert("Event not added because:  "+ jsonData.message);
+			    }
+			}, false); // Bind the callback to the load event
+			xmlHttp.send(dataString); // Send the data
+			updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
 		    }
 		    // This updateCalendar() function only alerts the dates in the currently specified month.  You need to write
 		    // it to modify the DOM (optionally using jQuery) to display the days and weeks in the current month.
@@ -379,7 +376,7 @@ session_start();
 				    if(days[j].getMonth() == currentMonth.month){	
 					var cellText = document.createTextNode(days[j].getDate());
 					cell.setAttribute("onclick", clickCell, false);
-					cell.setAttribute("style", "cursor: pointer");
+    				cell.setAttribute("style", "cursor: pointer");
 					cell.appendChild(cellText);
 					row.appendChild(cell);
 					
@@ -427,7 +424,6 @@ session_start();
 		</div>
 		<div id="ModifyEventForm">
 		</div>
-
 		<form>
 		    <input type="checkbox" name="categories" id = "work" value="w">Work
 		    <input type="checkbox" name="categories" id = "personal" value="p">Personal
