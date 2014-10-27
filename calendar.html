@@ -1,315 +1,50 @@
-<?php session_start();?>
-<!DOCTYPE html>
-    <html lang=en>
-        <head>
-            <title>Welcome to Your Calendar</title>
-            <link rel="stylesheet" type="text/css" href="cal.css">
-            	<script type="text/javascript" src="http://classes.engineering.wustl.edu/cse330/content/calendar.min.js"></script>
-				<script type="text/javascript">
-					var month = new Array();
-					month[0] = "January";
-					month[1] = "February";
-					month[2] = "March";
-					month[3] = "April";
-					month[4] = "May";
-					month[5] = "June";
-					month[6] = "July";
-					month[7] = "August";
-					month[8] = "September";
-					month[9] = "October";
-					month[10] = "November";
-					month[11] = "December";
-					document.addEventListener("DOMContentLoaded",function(){
-						  // get the reference for the body
-						  var body = document.getElementsByTagName("body")[0];					  
-						  // creates a <table> element and a <tbody> element
-						  var calendargrid     = document.createElement("table");
-						  calendargrid.setAttribute("id","grid");
-						  var calendargridHead = document.createElement("thead");
-						  var calendargridBody = document.createElement("tbody");					     
-						  calendargridHead = document.createTextNode(month[currentMonth.month] + ", " + currentMonth.year);
-						 
-						  // creating all cells
-						  for (var i = -1; i < currentMonth.getWeeks().length; i++) {
-						    // creates a table row
-						    var row = document.createElement("tr");
-						 
-						    for (var j = 0; j < 7; j++) {
-						      if(i==-1){
-						       var cell = document.createElement("td");
-						      if(j==0){
-						        var cellText = document.createTextNode("Sunday");
-						      }
-						      if(j==1){
-						       var cellText = document.createTextNode("Monday");
-						      }
-						      if(j==2){
-						       var cellText = document.createTextNode("Tuesday");
-						      }
-						      if(j==3){
-						       var cellText = document.createTextNode("Wednesday");
-						      }
-						      if(j==4){
-						       var cellText = document.createTextNode("Thursday");
-						      }
-						      if(j==5){
-						        var cellText = document.createTextNode("Friday");
-						      }
-						      if(j==6){
-						        var cellText = document.createTextNode("Saturday");
-						      }
-						      cell.appendChild(cellText);
-						      row.appendChild(cell);
-						      }
-						      else{
-						      // Create a <td> element and a text node, make the text
-						      // node the contents of the <td>, and put the <td> at
-						      // the end of the table row
-						      var cell = document.createElement("td");
-						      var weeks = currentMonth.getWeeks();
-							  var days = weeks[i].getDates();
-								if(days[j].getMonth() == currentMonth.month){	
-								    var cellText = document.createTextNode(days[j].getDate());
-								    cell.addEventListener("click", clickCell, false);
+<?php
+session_start();
+require 'database.php';
+//check session id
+header("Content-Type: application/json");
+if(isset($_POST['eventTitle'])&&isset($_POST['eventStart'])&&isset($_POST['eventEnd'])&&isset($_POST['cat'])){
+	$insert = "INSERT INTO events (name, start, end, category) VALUES (?, ?, ?, ?)";
+	$stmt = $mysqli->prepare($insert);
+	if(!$stmt){
+		printf("Query Prep Failed: %s\n", $mysqli->error);
+		echo json_encode(array(
+		"success" => false
+	));
+		exit;
+	}
+	
+	$stmt->bindParam('ssss', $_POST['eventTitle'], $_POST['eventStart'], $_POST['eventEnd'], $_POST['cat']); 
+	$stmt->execute();
+	$stmt->close();
+	echo json_encode(array(
+		"success" => true
+	));
+	exit;
+}
 
-								    cell.appendChild(cellText);
-								    row.appendChild(cell);
-								}
-								else{
-								    var cellText = document.createTextNode("");
-								    cell.appendChild(cellText);
-								    row.appendChild(cell); 
-								}
-						  
-						      }
-						    }
-						 
-						    // add the row to the end of the table body
-						    calendargridBody.appendChild(row);
-						  }
-						  calendargrid.appendChild(calendargridHead);
-						  // put the <tbody> in the <table>
-						  calendargrid.appendChild(calendargridBody);
-						  // appends <table> into <body>
-						  body.appendChild(calendargrid);
-						  // sets the border attribute of calendargrid to 3;
-						  calendargrid.setAttribute("border", "3");
-						}, false);
-
-					// For our purposes, we can keep the current month in a variable in the global scope
-					var currentMonth = new Month(2014, 9); // October 2014
-					//firstday = new Day(2014, 9, 1);
-					// Change the month when the "next month" button is pressed
-					document.addEventListener("DOMContentLoaded",function(){
-					document.getElementById("nextmonth").addEventListener("click", function(event){
-						currentMonth = currentMonth.nextMonth();
-						updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
-						//alert("The new month is "+currentMonth.month+" "+currentMonth.year);
-					}, false);
-					//change the month when the previous month button is pressed
-					document.getElementById("prevmonth").addEventListener("click", function(event){
-						currentMonth = currentMonth.prevMonth();
-						updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
-						//alert("The new month is "+currentMonth.month+" "+currentMonth.year);
-					}, false);
-
-					document.getElementById("newevent").addEventListener("click", function(event){
-						var x = document.getElementById("newEventForm");
-					 	var createform = document.createElement("form"); // Create New Element Form
-					 	createform.setAttribute("action", "newevent.php"); // Setting Action Attribute on Form
-					 	createform.setAttribute("method", "post"); // Setting Method Attribute on Form
-					 	x.appendChild(createform);
-					 	var heading = document.createElement('h2'); // Heading of Form
-					 	heading.innerHTML = "Create a New Event";
-					 	createform.appendChild(heading);
-
-					 	var line = document.createElement('hr'); // Giving Horizontal Row After Heading
-					 	createform.appendChild(line);
-
-					 	var linebreak = document.createElement('br');
-					 	createform.appendChild(linebreak);
-
-					 	var titlelabel = document.createElement('label'); // Create Label for Event Title Field
-					 	titlelabel.innerHTML = "Event Title : "; // Set Field Labels
-					 	createform.appendChild(titlelabel);
-
-					 	var inputelement = document.createElement('input'); // Create Input Field for Event Title
-					 	inputelement.setAttribute("type", "text");
-					 	inputelement.setAttribute("name", "eventTitle");
-					 	createform.appendChild(inputelement);
-
-					 	var linebreak = document.createElement('br');
-					 	createform.appendChild(linebreak);
-
-						var startTimeLabel = document.createElement('label'); // Create bel for Event Title Field
-					 	startTimeLabel.innerHTML = "Event Start Time : "; // Set Field Labels
-					 	createform.appendChild(startTimeLabel);
-
-					 	var inputelement = document.createElement('input'); // Create Input Field for Event Title
-					 	inputelement.setAttribute("type", "datetime-local");
-					 	inputelement.setAttribute("name", "eventStart");
-					 	createform.appendChild(inputelement);
-
-					 	var linebreak = document.createElement('br');
-					 	createform.appendChild(linebreak);
-
-						var endTimeLabel = document.createElement('label'); // Create abel for Event Title Field
-			 			endTimeLabel.innerHTML = "Event End Time : "; // Set Field Labels
-			 			createform.appendChild(endTimeLabel);
-
-			 			var inputelement = document.createElement('input'); // Create Input Field for Event Title
-			 			inputelement.setAttribute("type", "datetime-local");
-			 			inputelement.setAttribute("name", "eventEnd");
-			 			createform.appendChild(inputelement);
-
-			 			var linebreak = document.createElement('br');
-			 			createform.appendChild(linebreak);
-
-						var catlabel = document.createElement('label'); // Create Label for Event Title Field
-			 			catlabel.innerHTML = "Categroy : "; // Set Field Labels
-			 			createform.appendChild(catlabel);
-
-			 			var inputelement = document.createElement('input'); // Create Input Field for Event Title
-			 			inputelement.setAttribute("type", "radio");
-			 			inputelement.setAttribute("name", "cat");
-						inputelement.setAttribute("value", "work");
-			 			createform.appendChild(inputelement);
-			 			var inputelement = document.createElement('input'); // Create Input Field for Event Title
-			 			inputelement.setAttribute("type", "radio");
-			 			inputelement.setAttribute("name", "cat");
-						inputelement.setAttribute("value", "personal");
-			 			createform.appendChild(inputelement);
-			 			var inputelement = document.createElement('input'); // Create Input Field for Event Title
-			 			inputelement.setAttribute("type", "radio");
-			 			inputelement.setAttribute("name", "cat");
-						inputelement.setAttribute("value", "social");
-			 			createform.appendChild(inputelement);
-			 			var inputelement = document.createElement('input'); // Create Input Field for Event Title
-			 			inputelement.setAttribute("type", "radio");
-			 			inputelement.setAttribute("name", "cat");
-						inputelement.setAttribute("value", "other");
-			 			createform.appendChild(inputelement);
-
-
-			 			var submitelement = document.createElement('input');
-			 			// Append Submit Button
-			 			submitelement.setAttribute("type", "submit");
-			 			submitelement.setAttribute("name", "submit");
-			 			submitelement.setAttribute("value", "Submit");
-			 			createform.appendChild(submitelement);
-					}, false);
-				},false);
-
-					//If a box is clicked on, give the option to add an event
-					function clickCell() {
-						//here is where we will call to the database the display the events for that date based on the categroies selected 
-					 			
-					       // Sample syntax for posting xmlHgp.open("POST",	"/query.cgi”,true);	
-							// xmlHgp.send("name=Bob&email=bob@example.com");
-					}
-					function newEvent(){
-								
-					}
-					// This updateCalendar() function only alerts the dates in the currently specified month.  You need to write
-					// it to modify the DOM (optionally using jQuery) to display the days and weeks in the current month.
-					function updateCalendar(){
-
-						var weeks = currentMonth.getWeeks();
-					 	 // get the reference for the body
-						 var body = document.getElementsByTagName("body")[0];
-						//if there is already a calendar grid there, remove it
-						 if (document.getElementById("grid")) document.getElementById("grid").remove();
-
-						  // creates a <table> element and a <tbody> element
-						  var calendargrid = document.createElement("table");
-						  calendargrid.setAttribute("id","grid");
-						  var calendargridHead = document.createElement("thead");
-						  var calendargridBody = document.createElement("tbody");
-						  var weeks = currentMonth.getWeeks();
-						  calendargridHead = document.createTextNode(month[currentMonth.month] + ", " + currentMonth.year);			
-						  // creating all cells based on the number of weeks
-						  for (var i = -1; i < weeks.length; i++) {
-						    // creates a table row
-						    var row = document.createElement("tr");
-						 	
-						    for (var j = 0; j < 7; j++) {
-						      if(i==-1){
-						       var cell = document.createElement("td");
-						      if(j==0){
-						        var cellText = document.createTextNode("Sunday");
-						      }
-						      if(j==1){
-						       var cellText = document.createTextNode("Monday");
-						      }
-						      if(j==2){
-						       var cellText = document.createTextNode("Tuesday");
-						      }
-						      if(j==3){
-						       var cellText = document.createTextNode("Wednesday");
-						      }
-						      if(j==4){
-						       var cellText = document.createTextNode("Thursday");
-						      }
-						      if(j==5){
-						        var cellText = document.createTextNode("Friday");
-						      }
-						      if(j==6){
-						        var cellText = document.createTextNode("Saturday");
-						      }
-						      cell.appendChild(cellText);
-						      row.appendChild(cell);
-						      }
-						      else{
-						      // Create a <td> element and a text node, make the text
-						      // node the contents of the <td>, and put the <td> at
-						      // the end of the table row
-						      var cell = document.createElement("td");
-							  var days = weeks[i].getDates();
-							    if(days[j].getMonth() == currentMonth.month){	
-								var cellText = document.createTextNode(days[j].getDate());
-								cell.addEventListener("click", clickCell, false);
-								cell.appendChild(cellText);
-								row.appendChild(cell);
-							    }
-							    else{
-								var cellText = document.createTextNode("");
-								cell.appendChild(cellText);
-								row.appendChild(cell); 
-							    }
-						      }
-						    }
-						 
-						    // add the row to the end of the table body
-						    calendargridBody.appendChild(row);
-						  }
-						  // put the <thead> in the <table>
-						  calendargrid.appendChild(calendargridHead);
-						  // put the <tbody> in the <table>
-						  calendargrid.appendChild(calendargridBody);
-						  // appends <table> into <body>
-						  body.appendChild(calendargrid);
-						  // sets the border attribute of calendargrid to 3;
-						  calendargrid.setAttribute("border", "3");
-					}
-				</script>
-        </head>
-        <body>
-        <div class="main">	
-		<div class="logoutbtn">
-			<form method="post" action="logout.php">
-				<label class="logout">
-				<input type="submit" id="logout" value="Log Out">
-				</label>
-			</form>
-		</div>
-		<div class = "monthbuttons">
-			<input type = "submit" id = "prevmonth" value="Previous Month">
-			<input type = "submit" id = "nextmonth" value="Next Month">
-		</div>
-			<input type ="submit" id = "newevent" value="Create a New Event">
-		<p id="instructions">Click on a date below to add an event</p>
-		<div id="newEventForm">
-		</div>
-	</div>
-		</body>	
-	</html>	
+else if(isset($_POST['eventTitle'])&&isset($_POST['eventStart'])&&isset($_POST['cat'])){
+	$insert = "INSERT INTO events (name, start, category) VALUES (?, ?, ?)";
+	$stmt = $mysqli->prepare($insert);
+	if(!$stmt){
+		printf("Query Prep Failed: %s\n", $mysqli->error);
+		echo json_encode(array(
+		"success" => false
+	));
+		exit;
+	}
+	
+	$stmt->bindParam('sss', $_POST['eventTitle'], $_POST['eventStart'], $_POST['cat']); //possible error: datetime format
+	$stmt->execute();
+	$stmt->close();
+	echo json_encode(array(
+		"success" => true
+	));
+	exit();
+}
+	echo json_encode(array(
+		"success" => false,
+		"message" => "not set"
+	));
+	exit();
+?>
