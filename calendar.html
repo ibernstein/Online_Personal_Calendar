@@ -266,6 +266,9 @@
 			}, false);
 			
 			document.getElementById("work").addEventListener("change",checkboxClicked, false);
+			document.getElementById("personal").addEventListener("change",checkboxClicked, false);
+			document.getElementById("social").addEventListener("change",checkboxClicked, false);
+			document.getElementById("other").addEventListener("change",checkboxClicked, false);
 		    }, false);	
 		    //If a box is clicked on, give the option to add an event
 		    function clickCell() {
@@ -301,6 +304,16 @@
 			var dataString;
 			if (document.getElementById("work").checked) {
 			    dataString = "category=" + encodeURIComponent("w");
+			}
+			else if(document.getElementById("personal").checked){
+				dataString = "category=" + encodeURIComponent("p");
+			}
+			else if(document.getElementById("social").checked){
+				dataString = "category=" + encodeURIComponent("s");
+			}
+			else if(document.getElementById("other").checked){
+				dataString = "category=" + encodeURIComponent("o");
+			}
 			    console.log(dataString);
 			    var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
 			    xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
