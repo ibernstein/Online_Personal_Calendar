@@ -273,8 +273,7 @@
 		    //If a box is clicked on, give the option to add an event
 		    function clickCell() {
 		    	//set the div innerhtml to be the events from the ajax call back 
-		    	alert(days[j]);
-		    	alert(cellText.value);
+		    	console.log(cellText.value);
 
 		  //   	var x = document.getElementById("ModifyEventForm");
 				// document.getElementById("ModifyEventForm").style.display="none";
@@ -403,11 +402,6 @@
 				    nameObjects.push(jsonData[key]);
 				});
 				updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
-				/*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
-				    alert("Success!");
-				}else{
-				    alert("Event not added because:  "+ jsonData.message);
-				}*/
 			    }, false); // Bind the callback to the load event
 			    xmlHttp.send(dataString); // Send the data
 			}else{
@@ -586,7 +580,8 @@
 					
 					var cellText = document.createTextNode(days[j].getDate());
 					var cellText2 = "";
-					cell.setAttribute("onclick", clickCell, false);
+					var cellText3 = "";
+					cell.setAttribute("click", clickCell, false);//send over objects to outside
 					cell.setAttribute("style", "cursor: pointer");
 					cell.appendChild(cellText);
 					for(var k = 0; k < eventStart.length; k++){
@@ -594,7 +589,9 @@
 						var linebreak = document.createElement("br");
 						cell.appendChild(linebreak);
 						cellText2 = document.createTextNode(nameStrings[k]);
+						cellText3 = document.createTextNode(": " + eventStart[k].toTimeString());
 						cell.appendChild(cellText2);
+						cell.appendChild(cellText3);
 					    }
 					}   
 					
