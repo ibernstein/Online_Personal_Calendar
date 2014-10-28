@@ -1,7 +1,8 @@
-
+<?php session_start(); ?>
 <!DOCTYPE html>
     <html lang=en>
         <head>
+	    <!--<link rel="shortcut icon" href="/~stephanie/ModFive/favicon.ico" /> NEED TO GET OWN FILE-->
             <title>Welcome to Your Calendar</title>
             <link rel="stylesheet" type="text/css" href="cal.css">
             	<script type="text/javascript" src="http://classes.engineering.wustl.edu/cse330/content/calendar.min.js"></script>
@@ -268,65 +269,170 @@
 		    }, false);	
 		    //If a box is clicked on, give the option to add an event
 		    function clickCell() {
-		    	var x = document.getElementById("ModifyEventForm");
-				document.getElementById("ModifyEventForm").style.display="none";
-				var createform = document.createElement("form"); // Create New Element Form
-				x.appendChild(createform);
-				var heading = document.createElement('h2'); // Heading of Form
-				heading.innerHTML = "Modify Your Events for the Selected Date";
-				createform.appendChild(heading);
+		    	//set the div innerhtml to be the events from the ajax call back 
+		    	alert(days[j]);
+		    	alert(cellText.value);
 
-		    	var editElement = document.createElement('input');
-				editElement.setAttribute("type", "submit");
-				editElement.setAttribute("name", "submit");
-				editElement.setAttribute("value", "Edit Event");
-				editElement.addEventListener("click", function(event){
-					//pop up the same form for adding an element and do all the same stuff
-			    },false);
+		  //   	var x = document.getElementById("ModifyEventForm");
+				// document.getElementById("ModifyEventForm").style.display="none";
+				// var createform = document.createElement("form"); // Create New Element Form
+				// x.appendChild(createform);
+				// var heading = document.createElement('h2'); // Heading of Form
+				// heading.innerHTML = "Modify Your Events for the Selected Date";
+				// createform.appendChild(heading);
 
-				var deleteelement = document.createElement('input');
-				deleteelement.setAttribute("type", "submit");
-				deleteelement.setAttribute("name", "submit");
-				deleteelement.setAttribute("value", "Delete Event");
-				editElement.addEventListener("click", function(event){
-					//send to a php to drop from the table 
-			    },false);
-				
+		  //   	var editElement = document.createElement('input');
+				// editElement.setAttribute("type", "submit");
+				// editElement.setAttribute("name", "submit");
+				// editElement.setAttribute("value", "Edit Event");
+				// editElement.addEventListener("click", function(event){
+				// 	//pop up the same form for adding an element and do all the same stuff. fill in the form with the current details by "GET" from the database
+			 //    },false);
+
+				// var deleteelement = document.createElement('input');
+				// deleteelement.setAttribute("type", "submit");
+				// deleteelement.setAttribute("name", "submit");
+				// deleteelement.setAttribute("value", "Delete Event");
+				// editElement.addEventListener("click", function(event){
+				// 	//send to a php to drop from the table 
+			 //    },false);
 		    }
 		    function checkboxClicked(){
-			console.log("hello2");
 			var dataString;
 			if (document.getElementById("work").checked) {
 			    dataString = "category=" + encodeURIComponent("w");
 			    console.log(dataString);
+			    var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+			    xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+			    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
+			    var nameObjects = [];
+			    var nameStrings = [];
+			    xmlHttp.addEventListener("load", function(event){
+				var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+				for(var i in jsonData){
+				    nameStrings.push(i);
+				}
+				var keys = Object.keys(jsonData);
+				keys.forEach(function(key){
+				    nameObjects.push(jsonData[key]);
+				});
+				updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+				if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+				    alert("Success!");
+				}else{
+				    alert("Event not added because:  "+ jsonData.message);
+				}
+			    }, false); // Bind the callback to the load event
+			    xmlHttp.send(dataString); // Send the data
+			    
 			}
 			else{
-			    dataString = "category=" + "";
+			    console.log("unclicked");
 			}
-			var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
-			xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
-			xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
-			xmlHttp.addEventListener("load", function(event){
-			    console.log(JSON.parse(event.target.responseText));
-			    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
-			    if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
-				//alert("Success!");
-			    }else{
-				alert("Event not added because:  "+ jsonData.message);
+			
+		    }
+		    function updateCalendarCategory(nameObjects, nameStrings){
+			var eventStart = [];
+			for(var q = 0; q < nameObjects.length; q++){
+			    eventStart.push(new Date(nameObjects[q].start));
+			}
+			var weeks = currentMonth.getWeeks();
+			// get the reference for the body
+			var body = document.getElementsByTagName("body")[0];
+			//if there is already a calendar grid there, remove it
+			if (document.getElementById("grid")) document.getElementById("grid").remove();
+			// creates a <table> element and a <tbody> element
+			var calendargrid = document.createElement("table");
+			calendargrid.setAttribute("id","grid");
+			var calendargridHead = document.createElement("thead");
+			var calendargridBody = document.createElement("tbody");
+			var weeks = currentMonth.getWeeks();
+			calendargridHead = document.createTextNode(month[currentMonth.month] + ", " + currentMonth.year);			
+			// creating all cells based on the number of weeks
+			for (var i = -1; i < weeks.length; i++) {
+			    // creates a table row
+			    var row = document.createElement("tr");
+				
+			    for (var j = 0; j < 7; j++) {
+				if(i==-1){
+				    var cell = document.createElement("td");
+				    if(j==0){
+				      var cellText = document.createTextNode("Sunday");
+				    }
+				    if(j==1){
+				     var cellText = document.createTextNode("Monday");
+				    }
+				    if(j==2){
+				     var cellText = document.createTextNode("Tuesday");
+				    }
+				    if(j==3){
+				     var cellText = document.createTextNode("Wednesday");
+				    }
+				    if(j==4){
+				     var cellText = document.createTextNode("Thursday");
+				    }
+				    if(j==5){
+				      var cellText = document.createTextNode("Friday");
+				    }
+				    if(j==6){
+				      var cellText = document.createTextNode("Saturday");
+				    }
+				    cell.appendChild(cellText);
+				    row.appendChild(cell);
+				}
+			    else{
+			      // Create a <td> element and a text node, make the text
+			      // node the contents of the <td>, and put the <td> at
+			      // the end of the table row
+				var cell = document.createElement("td");
+				    var days = weeks[i].getDates();
+				    if(days[j].getMonth() == currentMonth.month){
+					
+					var cellText = document.createTextNode(days[j].getDate());
+					var cellText2 = "";
+					cell.setAttribute("onclick", clickCell, false);
+					cell.setAttribute("style", "cursor: pointer");
+					cell.appendChild(cellText);
+					for(var k = 0; k < eventStart.length; k++){
+					    if(days[j].toDateString() == eventStart[k].toDateString()){
+						console.log(nameStrings[k]);
+						cellText2 = document.createTextNode(nameStrings[k]);
+						cell.appendChild(cellText2);
+					    }
+					}   
+					
+					row.appendChild(cell);
+					
+				    }
+				    else{
+					var cellText = document.createTextNode("");
+					cell.appendChild(cellText);
+					row.appendChild(cell); 
+				    }
+				}
 			    }
-			}, false); // Bind the callback to the load event
-			xmlHttp.send(dataString); // Send the data
-			updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+			 
+			    // add the row to the end of the table body
+			    calendargridBody.appendChild(row);
+			}
+			// put the <thead> in the <table>
+			calendargrid.appendChild(calendargridHead);
+			// put the <tbody> in the <table>
+			calendargrid.appendChild(calendargridBody);
+			// appends <table> into <body>
+			body.appendChild(calendargrid);
+			// sets the border attribute of calendargrid to 3;
+			calendargrid.setAttribute("border", "3");
 		    }
 		    // This updateCalendar() function only alerts the dates in the currently specified month.  You need to write
 		    // it to modify the DOM (optionally using jQuery) to display the days and weeks in the current month.
 		    function updateCalendar(){
     
 			var weeks = currentMonth.getWeeks();
-			 // get the reference for the body
-			 var body = document.getElementsByTagName("body")[0];
+			// get the reference for the body
+			var body = document.getElementsByTagName("body")[0];
 			//if there is already a calendar grid there, remove it
-			 if (document.getElementById("grid")) document.getElementById("grid").remove();
+			if (document.getElementById("grid")) document.getElementById("grid").remove();
     
 			// creates a <table> element and a <tbody> element
 			var calendargrid = document.createElement("table");
@@ -376,7 +482,7 @@
 				    if(days[j].getMonth() == currentMonth.month){	
 					var cellText = document.createTextNode(days[j].getDate());
 					cell.setAttribute("onclick", clickCell, false);
-    				cell.setAttribute("style", "cursor: pointer");
+					cell.setAttribute("style", "cursor: pointer");
 					cell.appendChild(cellText);
 					row.appendChild(cell);
 					

@@ -2,11 +2,9 @@
     session_start();
     require("database.php");
     header("Content-Type: application/json");
-    echo json_encode(array(
-        "message" => "pre issest"
-    ));
-    if(isset($_SESSION['user_num'])&&isset($_POST['category'])){
-        $stmt = $mysqli->prepare("select name, start, end from events where user_id=? and category=?");
+    
+    if(isset($_SESSION['user_num'])&&isset($_POST['category'])){ 
+        $stmt = $mysqli->prepare("select id, name, start, end from events where user_id=? and category=?");
         if(!$stmt){
             echo json_encode(array(
                 "message" => "broke in query"       
@@ -16,14 +14,17 @@
         $category = $_POST['category'];
         $stmt->bind_param('is', $_SESSION['user_num'], $category);
         $stmt->execute();
-        $stmt->bind_result($name, $start, $end);
+        $stmt->bind_result($id, $name, $start, $end);
         while($stmt->fetch()){
-            echo json_encode(array(
-                "name" => htmlspecialchars($name),
-                "start" => htmlspecialchars($start),
-                "end" => htmlspecialchars($end)        
-            ));
+            $temp =  array(
+                        
+                        id => htmlspecialchars($id),
+                        start => htmlspecialchars($start),
+                        end => htmlspecialchars($end)
+                    );
+            $eventArray[htmlspecialchars($name)] = $temp;
         }
         $stmt->close();
-    }   
+        echo json_encode($eventArray);
+    } 
 ?>
