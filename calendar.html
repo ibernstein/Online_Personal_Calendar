@@ -304,17 +304,6 @@
 			var dataString;
 			if (document.getElementById("work").checked) {
 			    dataString = "category=" + encodeURIComponent("w");
-			}
-			else if(document.getElementById("personal").checked){
-				dataString = "category=" + encodeURIComponent("p");
-			}
-			else if(document.getElementById("social").checked){
-				dataString = "category=" + encodeURIComponent("s");
-			}
-			else if(document.getElementById("other").checked){
-				dataString = "category=" + encodeURIComponent("o");
-			}
-			    console.log(dataString);
 			    var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
 			    xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
 			    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
@@ -330,24 +319,218 @@
 				    nameObjects.push(jsonData[key]);
 				});
 				updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
-				if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+				/*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
 				    alert("Success!");
 				}else{
 				    alert("Event not added because:  "+ jsonData.message);
-				}
+				}*/
 			    }, false); // Bind the callback to the load event
 			    xmlHttp.send(dataString); // Send the data
-			    
+			}else{
+			    checkingCheckbox();
 			}
-			else{
-			    console.log("unclicked");
+			if(document.getElementById("personal").checked){
+			    dataString = "category=" + encodeURIComponent("p");
+			    console.log("p");
+			    var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+			    xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+			    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
+			    var nameObjects = [];
+			    var nameStrings = [];
+			    xmlHttp.addEventListener("load", function(event){
+				var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+				for(var i in jsonData){
+				    nameStrings.push(i);
+				}
+				var keys = Object.keys(jsonData);
+				keys.forEach(function(key){
+				    nameObjects.push(jsonData[key]);
+				});
+				updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+				/*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+				    alert("Success!");
+				}else{
+				    alert("Event not added because:  "+ jsonData.message);
+				}*/
+			    }, false); // Bind the callback to the load event
+			    xmlHttp.send(dataString); // Send the data
+			}else{
+			    checkingCheckbox();
 			}
+			if(document.getElementById("social").checked){
+			    dataString = "category=" + encodeURIComponent("s");
+			    console.log("s");
+			    var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+			    xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+			    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
+			    var nameObjects = [];
+			    var nameStrings = [];
+			    xmlHttp.addEventListener("load", function(event){
+				var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+				for(var i in jsonData){
+				    nameStrings.push(i);
+				}
+				var keys = Object.keys(jsonData);
+				keys.forEach(function(key){
+				    nameObjects.push(jsonData[key]);
+				});
+				updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+				/*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+				    alert("Success!");
+				}else{
+				    alert("Event not added because:  "+ jsonData.message);
+				}*/
+			    }, false); // Bind the callback to the load event
+			    xmlHttp.send(dataString); // Send the data
+			}else{
+			    checkingCheckbox();
+			}
+			if(document.getElementById("other").checked){
+			    dataString = "category=" + encodeURIComponent("o");
+			    console.log("o");
+			    var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+			    xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+			    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
+			    var nameObjects = [];
+			    var nameStrings = [];
+			    xmlHttp.addEventListener("load", function(event){
+				var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+				for(var i in jsonData){
+				    nameStrings.push(i);
+				}
+				var keys = Object.keys(jsonData);
+				keys.forEach(function(key){
+				    nameObjects.push(jsonData[key]);
+				});
+				updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+				/*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+				    alert("Success!");
+				}else{
+				    alert("Event not added because:  "+ jsonData.message);
+				}*/
+			    }, false); // Bind the callback to the load event
+			    xmlHttp.send(dataString); // Send the data
+			}else{
+			    checkingCheckbox();
+			}    
+		    }
+		    
+		    function checkingCheckbox(){
+			var dataString;
+			if (!document.getElementById("work").checked && !document.getElementById("personal").checked && !document.getElementById("social").checked && !document.getElementById("other").checked) {
+			    updateCalendar();
+			}else{
+			    if (document.getElementById("work").checked) {
+				dataString = "category=" + encodeURIComponent("w");
+				var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+				xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+				xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
+				var nameObjects = [];
+				var nameStrings = [];
+				xmlHttp.addEventListener("load", function(event){
+				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+				    for(var i in jsonData){
+					nameStrings.push(i);
+				    }
+				    var keys = Object.keys(jsonData);
+				    keys.forEach(function(key){
+					nameObjects.push(jsonData[key]);
+				    });
+				    updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+				    /*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+					alert("Success!");
+				    }else{
+					alert("Event not added because:  "+ jsonData.message);
+				    }*/
+				}, false); // Bind the callback to the load event
+				xmlHttp.send(dataString); // Send the data
+			    }
+			    if(document.getElementById("personal").checked){
+				dataString = "category=" + encodeURIComponent("p");
+				console.log("p");
+				var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+				xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+				xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
+				var nameObjects = [];
+				var nameStrings = [];
+				xmlHttp.addEventListener("load", function(event){
+				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+				    for(var i in jsonData){
+					nameStrings.push(i);
+				    }
+				    var keys = Object.keys(jsonData);
+				    keys.forEach(function(key){
+					nameObjects.push(jsonData[key]);
+				    });
+				    updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+				    /*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+					alert("Success!");
+				    }else{
+					alert("Event not added because:  "+ jsonData.message);
+				    }*/
+				}, false); // Bind the callback to the load event
+				xmlHttp.send(dataString); // Send the data
+			    }
+			    if(document.getElementById("social").checked){
+				dataString = "category=" + encodeURIComponent("s");
+				console.log("s");
+				var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+				xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+				xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
+				var nameObjects = [];
+				var nameStrings = [];
+				xmlHttp.addEventListener("load", function(event){
+				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+				    for(var i in jsonData){
+					nameStrings.push(i);
+				    }
+				    var keys = Object.keys(jsonData);
+				    keys.forEach(function(key){
+					nameObjects.push(jsonData[key]);
+				    });
+				    updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+				    /*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+					alert("Success!");
+				    }else{
+					alert("Event not added because:  "+ jsonData.message);
+				    }*/
+				}, false); // Bind the callback to the load event
+				xmlHttp.send(dataString); // Send the data
+			    }
+			    if(document.getElementById("other").checked){
+				dataString = "category=" + encodeURIComponent("o");
+				console.log("o");
+				var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+				xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+				xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
+				var nameObjects = [];
+				var nameStrings = [];
+				xmlHttp.addEventListener("load", function(event){
+				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+				    for(var i in jsonData){
+					nameStrings.push(i);
+				    }
+				    var keys = Object.keys(jsonData);
+				    keys.forEach(function(key){
+					nameObjects.push(jsonData[key]);
+				    });
+				    updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+				    /*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+					alert("Success!");
+				    }else{
+					alert("Event not added because:  "+ jsonData.message);
+				    }*/
+				}, false); // Bind the callback to the load event
+				xmlHttp.send(dataString); // Send the data
+			    }
+			}   
 			
 		    }
+		    
 		    function updateCalendarCategory(nameObjects, nameStrings){
 			var eventStart = [];
 			for(var q = 0; q < nameObjects.length; q++){
-			    eventStart.push(new Date(nameObjects[q].start));
+			    eventStart.push(new Date(nameObjects[q].start));;
 			}
 			var weeks = currentMonth.getWeeks();
 			// get the reference for the body
@@ -408,7 +591,8 @@
 					cell.appendChild(cellText);
 					for(var k = 0; k < eventStart.length; k++){
 					    if(days[j].toDateString() == eventStart[k].toDateString()){
-						console.log(nameStrings[k]);
+						var linebreak = document.createElement("br");
+						cell.appendChild(linebreak);
 						cellText2 = document.createTextNode(nameStrings[k]);
 						cell.appendChild(cellText2);
 					    }
@@ -440,7 +624,10 @@
 		    // This updateCalendar() function only alerts the dates in the currently specified month.  You need to write
 		    // it to modify the DOM (optionally using jQuery) to display the days and weeks in the current month.
 		    function updateCalendar(){
-    
+			document.getElementById("work").checked = false;
+			document.getElementById("personal").checked = false;
+			document.getElementById("social").checked = false;
+			document.getElementById("other").checked = false;
 			var weeks = currentMonth.getWeeks();
 			// get the reference for the body
 			var body = document.getElementsByTagName("body")[0];
