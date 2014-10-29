@@ -38,25 +38,28 @@
 			}, false);
 			//document.getElementById("neweventdiv").style.display="none";
 			document.getElementById("newevent").addEventListener("click", creatingEvent, false);
+			document.getElementById("work").addEventListener("change", checkboxClicked, false);
+			document.getElementById("personal").addEventListener("change", checkboxClicked, false);
+			document.getElementById("social").addEventListener("change", checkboxClicked, false);
+			document.getElementById("other").addEventListener("change", checkboxClicked, false);
 		    }
 		    function creatingEvent(){
 			document.getElementById("neweventdiv").style.display="block";
 			document.getElementById("addevent").addEventListener("click", function(event){
 			    $cat = null;
-			    if (document.getElementById("Work").checked) {
+			    if (document.getElementById("workevent").checked) {
 			       $cat = "w"; 
 			    }
-			    else if (document.getElementById("Personal").checked) {
+			    else if (document.getElementById("personalevent").checked) {
 			       $cat = "p"; 
 			    }
-			    else if (document.getElementById("Social").checked) {
+			    else if (document.getElementById("socialevent").checked) {
 			       $cat = "s"; 
 			    }
-			    else if (document.getElementById("Other").checked) {
+			    else if (document.getElementById("otherevent").checked) {
 			       $cat = "o"; 
 			    }
-			    var dataString = "name=" + encodeURIComponent(inputelement.value) + "&start=" + encodeURIComponent(inputelement2.value) + "&end=" + encodeURIComponent(inputelement3.value) + "&cat=" + encodeURIComponent($cat);
-				
+			    var dataString = "name=" + encodeURIComponent(document.getElementById("name").value) + "&start=" + encodeURIComponent(document.getElementById("start").value) + "&end=" + encodeURIComponent(document.getElementById("end").value) + "&cat=" + encodeURIComponent($cat);
 			    var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
 			    xmlHttp.open("POST", "newevent.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
 			    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
@@ -71,13 +74,9 @@
 			    xmlHttp.send(dataString); // Send the data
 			    document.getElementById("neweventdiv").style.display="none";
 			}, false)
-			cancelelement.addEventListener("click", function(event){
+			document.getElementById("cancel").addEventListener("click", function(event){
 			    document.getElementById("neweventdiv").style.display="none";
 			},false);
-			document.getElementById("work").addEventListener("change",checkboxClicked, false);
-			document.getElementById("personal").addEventListener("change",checkboxClicked, false);
-			document.getElementById("social").addEventListener("change",checkboxClicked, false);
-			document.getElementById("other").addEventListener("change",checkboxClicked, false);
 		    }
 		    //If a box is clicked on, give the option to add an event
 		    function clickCell(nameObjects, nameStrings) {
@@ -117,6 +116,7 @@
 			    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
 			    var nameObjects = [];
 			    var nameStrings = [];
+			    var category = "work";
 			    xmlHttp.addEventListener("load", function(event){
 				var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				for(var i in jsonData){
@@ -145,6 +145,7 @@
 			    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
 			    var nameObjects = [];
 			    var nameStrings = [];
+			    var category = "personal";
 			    xmlHttp.addEventListener("load", function(event){
 				var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				for(var i in jsonData){
@@ -173,6 +174,7 @@
 			    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
 			    var nameObjects = [];
 			    var nameStrings = [];
+			    var category = "social";
 			    xmlHttp.addEventListener("load", function(event){
 				var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				for(var i in jsonData){
@@ -201,6 +203,7 @@
 			    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
 			    var nameObjects = [];
 			    var nameStrings = [];
+			    var category = "other";
 			    xmlHttp.addEventListener("load", function(event){
 				var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				for(var i in jsonData){
@@ -230,6 +233,7 @@
 				xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
 				var nameObjects = [];
 				var nameStrings = [];
+				var category = "work";
 				xmlHttp.addEventListener("load", function(event){
 				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				    for(var i in jsonData){
@@ -256,6 +260,7 @@
 				xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
 				var nameObjects = [];
 				var nameStrings = [];
+				var category = "personal";
 				xmlHttp.addEventListener("load", function(event){
 				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				    for(var i in jsonData){
@@ -282,6 +287,7 @@
 				xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
 				var nameObjects = [];
 				var nameStrings = [];
+				var category = "social";
 				xmlHttp.addEventListener("load", function(event){
 				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				    for(var i in jsonData){
@@ -308,6 +314,7 @@
 				xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
 				var nameObjects = [];
 				var nameStrings = [];
+				var category = "other";
 				xmlHttp.addEventListener("load", function(event){
 				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				    for(var i in jsonData){
@@ -330,7 +337,7 @@
 			
 		    }
 		    
-		    function updateCalendarCategory(nameObjects, nameStrings){
+		    function updateCalendarCategory(nameObjects, nameStrings, category){
 			var eventStart = [];
 			for(var q = 0; q < nameObjects.length; q++){
 			    eventStart.push(new Date(nameObjects[q].start));;
@@ -398,7 +405,26 @@
 						var linebreak = document.createElement("br");
 						cell.appendChild(linebreak);
 						cellText2 = document.createTextNode(nameStrings[k]);
+						cellText2.setAttribute("id", "cellText2");
 						cellText3 = document.createTextNode(": " + eventStart[k].toTimeString());
+						cellText3.setAttribute("id", "cellText3");
+
+						if(category=="work"){
+							document.getElementById("cellText2").style.color = "black";
+							document.getElementById("cellText3").style.color = "black";
+						}
+						else if(category=="personal"){
+							document.getElementById("cellText2").style.color = "magenta";
+							document.getElementById("cellText3").style.color = "magenta";
+						}
+						else if(category=="other"){
+							document.getElementById("cellText2").style.color = "red";
+							document.getElementById("cellText3").style.color = "red";
+						}
+						else if(category=="social"){
+							document.getElementById("cellText2").style.color = "green";
+							document.getElementById("cellText3").style.color = "green";
+						}
 						cell.appendChild(cellText2);
 						cell.appendChild(cellText3);
 					    }
@@ -514,48 +540,61 @@
 			calendargrid.setAttribute("border", "3");
 		    }
 		</script>
+		
         </head>
         <body>
-        <div class="main">
-        <div class="nav">	
-		<div class="logoutbtn">
-			<form method="post" action="logout.php">
-				<label class="logout">
-				<input type="submit" id="logout" value="Log Out">
-				</label>
-			</form>
-		</div>
-		<div class = "monthbuttons">
-			<button id = "prevmonth">Previous Month</button> 
-			<button id = "nextmonth">Next Month</button>
-		</div>
-			<button id = "newevent">Create a new event</button>
-		</div>
-		<p id="instructions">Click on a date below to see the events on that day</p>
-		<div id="neweventdiv" style="display: none">
-		    <form id="neweventform">
-			<h2>Create a New Event</h2>
-			<hr></hr><br>
-			Event Title:<input type="text" name="name" id="name"><br>
-			Event Start Time:<input type="datetime-local" name="start" id="start"><br>
-			Event End Time:<input type="datetime-local" name="end" id="end"><br>
-			Category:<br>
-			Work:<input type="radio" id="work" name="cat" value="w"><br>
-			Personal:<input type="radio" id="personal" name="cat" value="p"><br>
-			Social:<input type="radio" id="social" name="cat" value="s"><br>
-			Other:<input type="radio" id="other" name="cat" value="o"><br>
-			<button id="addevent" name="addevent">Add Event</button>
-			<button id="cancel" name="cancel">Cancel Event</button>
-		    </form> 
-		</div>
-		<div id="ModifyEventForm">
-		</div>
-		<form>
-		    <input type="checkbox" name="categories" id = "work" value="w">Work
-		    <input type="checkbox" name="categories" id = "personal" value="p">Personal
-		    <input type="checkbox" name="categories" id = "social" value="s">Social
-		    <input type="checkbox" name="categories" id = "other" value="o">Other
-		</form>
-	</div>
-		</body>	
+	    <div id="fb-root"></div>
+		<script>(function(d, s, id) {
+		    var js, fjs = d.getElementsByTagName(s)[0];
+		    if (d.getElementById(id)) return;
+		    js = d.createElement(s); js.id = id;
+		    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+		    fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+	    </script>
+	    
+	    <div class="main">
+	    <div class="nav">	
+		    <div class="logoutbtn">
+			    <form method="post" action="logout.php">
+				    <label class="logout">
+				    <input type="submit" id="logout" value="Log Out">
+				    </label>
+			    </form>
+		    </div>
+		    <div class = "monthbuttons">
+			    <button id = "prevmonth">Previous Month</button> 
+			    <button id = "nextmonth">Next Month</button>
+		    </div>
+			    <button id = "newevent">Create a new event</button>
+		    </div>
+		    <p id="instructions">Click on a date below to see the events on that day</p>
+		    <div id="neweventdiv" style="display: none">
+			<form id="neweventform">
+			    <h2>Create a New Event</h2>
+			    <hr></hr><br>
+			    Event Title:<input type="text" name="name" id="name"><br>
+			    Event Start Time:<input type="datetime-local" name="start" id="start"><br>
+			    Event End Time:<input type="datetime-local" name="end" id="end"><br>
+			    Category:<br>
+			    Work:<input type="radio" id="workevent" name="cat" value="w"><br>
+			    Personal:<input type="radio" id="personalevent" name="cat" value="p"><br>
+			    Social:<input type="radio" id="socialevent" name="cat" value="s"><br>
+			    Other:<input type="radio" id="otherevent" name="cat" value="o"><br>
+			    <button id="addevent" name="addevent">Add Event</button>
+			    <button id="cancel" name="cancel">Cancel Event</button>
+			</form> 
+		    </div>
+		    <div id="ModifyEventForm">
+		    </div>
+		    <form>
+			<input type="checkbox" name="categories" id="work" value="w">Work
+			<input type="checkbox" name="categories" id="personal" value="p">Personal
+			<input type="checkbox" name="categories" id="social" value="s">Social
+			<input type="checkbox" name="categories" id="other" value="o">Other
+		    </form>
+		    
+	    </div>
+	    <div class="fb-like-box" id="fb" data-href="https://www.facebook.com/pages/IsCalendar/465902643549558" data-colorscheme="light" data-show-faces="true" data-header="true" data-stream="false" data-show-border="true"></div>
+	    </body>	
 	</html>	

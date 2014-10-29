@@ -25,6 +25,13 @@ h1 {
 p {
     color: Indigo;
 }
-#logout-form #logout-button { 
-	float: right; 
+
+#fb{
+    position: absolute;
+    right: 0px;
+}
+
+#logout { 
+    position: absolute;
+    right: 0px;
 }
