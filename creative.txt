@@ -1,0 +1,19 @@
+Stephanie Mertz		431092
+Ian Bernstein 		431492
+
+ 
+http://ec2-54-69-97-64.us-west-2.compute.amazonaws.com/~stephanie/ModFive/
+
+
+	 	  - Bootstrap was used for the login page
+		  - I made a favicon (icon at the top of the tab)
+		  - Different categories are displayed using different text colors
+		  - Events can be selected based on category (suggestion from wiki)
+		  - the pointer changes when cells are moused over but only the cells with dates
+		  - Like our page on Facebook! Relies on cookies to know who is logged in. if cookies are 
+              disabled they can still click our facebook page link 
+
+
+
+	To use website begin on login.php
+		You will then have the opportunity to log in/ sign up.
