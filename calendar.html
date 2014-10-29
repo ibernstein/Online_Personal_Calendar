@@ -7,7 +7,529 @@
             <link rel="stylesheet" type="text/css" href="cal.css">
             	<script type="text/javascript" src="http://classes.engineering.wustl.edu/cse330/content/calendar.min.js"></script>
 		<script type="text/javascript">
-		  
+		              var month = [];
+            month[0] = "January";
+            month[1] = "February";
+            month[2] = "March";
+            month[3] = "April";
+            month[4] = "May";
+            month[5] = "June";
+            month[6] = "July";
+            month[7] = "August";
+            month[8] = "September";
+            month[9] = "October";
+            month[10] = "November";
+            month[11] = "December";
+            // For our purposes, we can keep the current month in a variable in the global scope
+            var currentMonth = new Month(2014, 9); // October 2014
+            //firstday = new Day(2014, 9, 1);
+            document.addEventListener("DOMContentLoaded", updateCalendar, false);
+            // Change the month when the "next month" button is pressed
+            document.addEventListener("DOMContentLoaded", topThreeButtons, false);
+            function topThreeButtons(){
+            document.getElementById("nextmonth").addEventListener("click", function(event){
+                currentMonth = currentMonth.nextMonth();
+                updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+            }, false);
+            //change the month when the previous month button is pressed
+            document.getElementById("prevmonth").addEventListener("click", function(event){
+                currentMonth = currentMonth.prevMonth();
+                updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+            }, false);
+            //document.getElementById("neweventdiv").style.display="none";
+            document.getElementById("newevent").addEventListener("click", creatingEvent, false);
+            document.getElementById("work").addEventListener("change", checkboxClicked, false);
+            document.getElementById("personal").addEventListener("change", checkboxClicked, false);
+            document.getElementById("social").addEventListener("change", checkboxClicked, false);
+            document.getElementById("other").addEventListener("change", checkboxClicked, false);
+            }
+            function creatingEvent(){
+            document.getElementById("neweventdiv").style.display="block";
+            document.getElementById("addevent").addEventListener("click", function(event){
+                var $cat = null;
+                if (document.getElementById("workevent").checked) {
+                   $cat = "w"; 
+                }
+                else if (document.getElementById("personalevent").checked) {
+                   $cat = "p"; 
+                }
+                else if (document.getElementById("socialevent").checked) {
+                   $cat = "s"; 
+                }
+                else if (document.getElementById("otherevent").checked) {
+                   $cat = "o"; 
+                }
+                var dataString = "name=" + encodeURIComponent(document.getElementById("name").value) + "&start=" + encodeURIComponent(document.getElementById("start").value) + "&end=" + encodeURIComponent(document.getElementById("end").value) + "&cat=" + encodeURIComponent($cat);
+                var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+                xmlHttp.open("POST", "newevent.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+                xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
+                xmlHttp.addEventListener("load", function(event){
+                var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+                if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+                    alert("Success!");
+                }else{
+                    alert("Event not added because:  "+ jsonData.message);
+                }
+                }, false); // Bind the callback to the load event
+                xmlHttp.send(dataString); // Send the data
+                document.getElementById("neweventdiv").style.display="none";
+            }, false);
+            document.getElementById("cancel").addEventListener("click", function(event){
+                document.getElementById("neweventdiv").style.display="none";
+            },false);
+            }
+            //If a box is clicked on, give the option to add an event
+						function clickCell(){ 
+                console.log("This is where we would make it so event modify and delete were able to tbe performed");
+            }
+            function checkboxClicked(){
+            var dataString, nameObjects, nameStrings, category;
+            if (document.getElementById("work").checked) {
+                dataString = "category=" + encodeURIComponent("w");
+                var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+                xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+                xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
+                nameObjects = [];
+                nameStrings = [];
+                category = "work";
+                xmlHttp.addEventListener("load", function(event){
+                var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+                for(var i in jsonData){
+                  if (jsonData.hasOwnProperty(i)) {
+                    nameStrings.push(i);
+                  }
+                }
+                var keys = Object.keys(jsonData);
+                keys.forEach(function(key){
+                    nameObjects.push(jsonData[key]);
+                });
+                updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+                /*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+                    alert("Success!");
+                }else{
+                    alert("Event not added because:  "+ jsonData.message);
+                }*/
+                }, false); // Bind the callback to the load event
+                xmlHttp.send(dataString); // Send the data
+            }else{
+                checkingCheckbox();
+            }
+            if(document.getElementById("personal").checked){
+                dataString = "category=" + encodeURIComponent("p");
+                console.log("p");
+                var xmlHttp2 = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+                xmlHttp2.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+                xmlHttp2.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
+                nameObjects = [];
+                nameStrings = [];
+                category = "personal";
+                xmlHttp2.addEventListener("load", function(event){
+                var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+                for(var i in jsonData){
+                  if (jsonData.hasOwnProperty(i)) {
+                    nameStrings.push(i);
+                  }
+                }
+                var keys = Object.keys(jsonData);
+                keys.forEach(function(key){
+                    nameObjects.push(jsonData[key]);
+                });
+                updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+                /*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+                    alert("Success!");
+                }else{
+                    alert("Event not added because:  "+ jsonData.message);
+                }*/
+                }, false); // Bind the callback to the load event
+                xmlHttp2.send(dataString); // Send the data
+            }else{
+                checkingCheckbox();
+            }
+            if(document.getElementById("social").checked){
+                dataString = "category=" + encodeURIComponent("s");
+                console.log("s");
+                var xmlHttp3 = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+                xmlHttp3.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+                xmlHttp3.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
+                nameObjects = [];
+                nameStrings = [];
+                category = "social";
+                xmlHttp3.addEventListener("load", function(event){
+                var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+                for(var i in jsonData){
+                    if (jsonData.hasOwnProperty(i)) {
+                    nameStrings.push(i);
+                  }
+                }
+                var keys = Object.keys(jsonData);
+                keys.forEach(function(key){
+                    nameObjects.push(jsonData[key]);
+                });
+                updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+                /*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+                    alert("Success!");
+                }else{
+                    alert("Event not added because:  "+ jsonData.message);
+                }*/
+                }, false); // Bind the callback to the load event
+                xmlHttp3.send(dataString); // Send the data
+            }else{
+                checkingCheckbox();
+            }
+            if(document.getElementById("other").checked){
+                dataString = "category=" + encodeURIComponent("o");
+                console.log("o");
+                var xmlHttp4 = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+                xmlHttp4.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+                xmlHttp4.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
+                nameObjects = [];
+                nameStrings = [];
+                category = "other";
+                xmlHttp4.addEventListener("load", function(event){
+                var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+                for(var i in jsonData){
+                    if (jsonData.hasOwnProperty(i)) {
+                    nameStrings.push(i);
+                  }
+                }
+                var keys = Object.keys(jsonData);
+                keys.forEach(function(key){
+                    nameObjects.push(jsonData[key]);
+                });
+                updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+                }, false); // Bind the callback to the load event
+                xmlHttp4.send(dataString); // Send the data
+            }else{
+                checkingCheckbox();
+            }    
+            }
+            
+            function checkingCheckbox(){
+            var dataString, nameObjects, nameStrings, category;
+            if (!document.getElementById("work").checked && !document.getElementById("personal").checked && !document.getElementById("social").checked && !document.getElementById("other").checked) {
+                updateCalendar();
+            }else{
+                if (document.getElementById("work").checked) {
+                dataString = "category=" + encodeURIComponent("w");
+                var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+                xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+                xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
+                nameObjects = [];
+                nameStrings = [];
+                category = "work";
+                xmlHttp.addEventListener("load", function(event){
+                    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+                    for(var i in jsonData){
+                    if (jsonData.hasOwnProperty(i)) {
+                    nameStrings.push(i);
+                  }
+                    }
+                    var keys = Object.keys(jsonData);
+                    keys.forEach(function(key){
+                    nameObjects.push(jsonData[key]);
+                    });
+                    updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+                    /*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+                    alert("Success!");
+                    }else{
+                    alert("Event not added because:  "+ jsonData.message);
+                    }*/
+                }, false); // Bind the callback to the load event
+                xmlHttp.send(dataString); // Send the data
+                }
+               if(document.getElementById("personal").checked){
+                dataString = "category=" + encodeURIComponent("p");
+                console.log("p");
+                var xmlHttp5 = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+                xmlHttp5.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+                xmlHttp5.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
+                nameObjects = [];
+                nameStrings = [];
+                category = "personal";
+                xmlHttp5.addEventListener("load", function(event){
+                    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+                    for(var i in jsonData){
+                    if (jsonData.hasOwnProperty(i)) {
+                    nameStrings.push(i);
+                  }
+                    }
+                    var keys = Object.keys(jsonData);
+                    keys.forEach(function(key){
+                    nameObjects.push(jsonData[key]);
+                    });
+                    updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+                    /*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+                    alert("Success!");
+                    }else{
+                    alert("Event not added because:  "+ jsonData.message);
+                    }*/
+                }, false); // Bind the callback to the load event
+                xmlHttp5.send(dataString); // Send the data
+                }
+                if(document.getElementById("social").checked){
+                dataString = "category=" + encodeURIComponent("s");
+                console.log("s");
+                var xmlHttp6 = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+                xmlHttp6.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+                xmlHttp6.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
+                nameObjects = [];
+                nameStrings = [];
+                category = "social";
+                xmlHttp6.addEventListener("load", function(event){
+                    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+                    for(var i in jsonData){
+                    if (jsonData.hasOwnProperty(i)) {
+                    nameStrings.push(i);
+                  }
+                    }
+                    var keys = Object.keys(jsonData);
+                    keys.forEach(function(key){
+                    nameObjects.push(jsonData[key]);
+                    });
+                    updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+                    /*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+                    alert("Success!");
+                    }else{
+                    alert("Event not added because:  "+ jsonData.message);
+                    }*/
+                }, false); // Bind the callback to the load event
+                xmlHttp6.send(dataString); // Send the data
+                }
+                if(document.getElementById("other").checked){
+                dataString = "category=" + encodeURIComponent("o");
+                console.log("o");
+                var xmlHttp7 = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+                xmlHttp7.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+                xmlHttp7.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
+                nameObjects = [];
+                nameStrings = [];
+                category = "other";
+                xmlHttp7.addEventListener("load", function(event){
+                    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+                    for(var i in jsonData){
+                    if (jsonData.hasOwnProperty(i)) {
+                    nameStrings.push(i);
+                  }
+                    }
+                    var keys = Object.keys(jsonData);
+                    keys.forEach(function(key){
+                    nameObjects.push(jsonData[key]);
+                    });
+                    updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+                    /*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+                    alert("Success!");
+                    }else{
+                    alert("Event not added because:  "+ jsonData.message);
+                    }*/
+                }, false); // Bind the callback to the load event
+                xmlHttp7.send(dataString); // Send the data
+                }
+            }   
+            
+            }
+            
+            function updateCalendarCategory(nameObjects, nameStrings, category){
+            var eventStart = [];
+            for(var q = 0; q < nameObjects.length; q++){
+                eventStart.push(new Date(nameObjects[q].start));
+            }
+            var weeks = currentMonth.getWeeks();
+            // get the reference for the body
+            var body = document.getElementsByTagName("body")[0];
+            //if there is already a calendar grid there, remove it
+            if (document.getElementById("grid")) document.getElementById("grid").remove();
+            // creates a <table> element and a <tbody> element
+            var calendargrid = document.createElement("table");
+            calendargrid.setAttribute("id","grid");
+            var calendargridHead = document.createElement("thead");
+            var calendargridBody = document.createElement("tbody");
+            calendargridHead = document.createTextNode(month[currentMonth.month] + ", " + currentMonth.year);            
+            // creating all cells based on the number of weeks
+            for (var i = -1; i < weeks.length; i++) {
+                // creates a table row
+                var row = document.createElement("tr");
+                
+                for (var j = 0; j < 7; j++) {
+            var cellText;
+                if(i==-1){
+                    var cell = document.createElement("td");
+                    if(j===0){
+                      cellText = document.createTextNode("Sunday");
+                    }
+                    if(j==1){
+                     cellText = document.createTextNode("Monday");
+                    }
+                    if(j==2){
+                     cellText = document.createTextNode("Tuesday");
+                    }
+                    if(j==3){
+                     cellText = document.createTextNode("Wednesday");
+                    }
+                    if(j==4){
+                     cellText = document.createTextNode("Thursday");
+                    }
+                    if(j==5){
+                      cellText = document.createTextNode("Friday");
+                    }
+                    if(j==6){
+                      cellText = document.createTextNode("Saturday");
+                    }
+                    cell.appendChild(cellText);
+                    row.appendChild(cell);
+                }
+                else{
+                // Create a <td> element and a text node, make the text
+                // node the contents of the <td>, and put the <td> at
+                // the end of the table row
+                var cell34 = document.createElement("td");
+                    var days = weeks[i].getDates();
+                    if(days[j].getMonth() == currentMonth.month){
+                    
+                    //var cellText34 = document.createTextNode(days[j].getDate());
+                    var cellText2 = "";
+                    var cellText3 = "";
+                    cell34.setAttribute("click", clickCell(nameObjects, nameStrings), false);//send over objects to outside
+                    cell34.setAttribute("style", "cursor: pointer");
+                    cell34.appendChild(cellText);
+                    for(var k = 0; k < eventStart.length; k++){
+                        if(days[j].toDateString() == eventStart[k].toDateString()){
+                        var linebreak = document.createElement("br");
+                        cell34.appendChild(linebreak);
+                        cellText2 = document.createTextNode(nameStrings[k]);
+                        cellText2.setAttribute("id", "cellText2");
+                        cellText3 = document.createTextNode(": " + eventStart[k].toTimeString());
+                        cellText3.setAttribute("id", "cellText3");
+
+                        if(category=="work"){
+                            document.getElementById("cellText2").style.color = "black";
+                            document.getElementById("cellText3").style.color = "black";
+                        }
+                        else if(category=="personal"){
+                            document.getElementById("cellText2").style.color = "magenta";
+                            document.getElementById("cellText3").style.color = "magenta";
+                        }
+                        else if(category=="other"){
+                            document.getElementById("cellText2").style.color = "red";
+                            document.getElementById("cellText3").style.color = "red";
+                        }
+                        else if(category=="social"){
+                            document.getElementById("cellText2").style.color = "green";
+                            document.getElementById("cellText3").style.color = "green";
+                        }
+                        cell34.appendChild(cellText2);
+                        cell34.appendChild(cellText3);
+                        }
+                    }   
+                    
+                    row.appendChild(cell34);
+                    
+                    }
+                    else{
+                    var cellText44 = document.createTextNode("");
+                    cell34.appendChild(cellText44);
+                    row.appendChild(cell34); 
+                    }
+                }
+                }
+             
+                // add the row to the end of the table body
+                calendargridBody.appendChild(row);
+            }
+            // put the <thead> in the <table>
+            calendargrid.appendChild(calendargridHead);
+            // put the <tbody> in the <table>
+            calendargrid.appendChild(calendargridBody);
+            // appends <table> into <body>
+            body.appendChild(calendargrid);
+            // sets the border attribute of calendargrid to 3;
+            calendargrid.setAttribute("border", "3");
+            }
+            // This updateCalendar() function only alerts the dates in the currently specified month.  You need to write
+            // it to modify the DOM (optionally using jQuery) to display the days and weeks in the current month.
+            function updateCalendar(){
+            document.getElementById("work").checked = false;
+            document.getElementById("personal").checked = false;
+            document.getElementById("social").checked = false;
+            document.getElementById("other").checked = false;
+            var weeks = currentMonth.getWeeks();
+            // get the reference for the body
+            var body = document.getElementsByTagName("body")[0];
+            //if there is already a calendar grid there, remove it
+            if (document.getElementById("grid")) document.getElementById("grid").remove();
+    
+            // creates a <table> element and a <tbody> element
+            var calendargrid = document.createElement("table");
+            calendargrid.setAttribute("id","grid");
+            var calendargridHead = document.createElement("thead");
+            var calendargridBody = document.createElement("tbody");
+            calendargridHead = document.createTextNode(month[currentMonth.month] + ", " + currentMonth.year);            
+            // creating all cells based on the number of weeks
+            for (var i = -1; i < weeks.length; i++) {
+                // creates a table row
+                var row = document.createElement("tr");
+                
+                for (var j = 0; j < 7; j++) {
+            var cellText;
+                if(i==-1){
+                    var cell = document.createElement("td");
+                    if(j===0){
+                      cellText = document.createTextNode("Sunday");
+                    }
+                    if(j==1){
+                     cellText = document.createTextNode("Monday");
+                    }
+                    if(j==2){
+                     cellText = document.createTextNode("Tuesday");
+                    }
+                    if(j==3){
+                     cellText = document.createTextNode("Wednesday");
+                    }
+                    if(j==4){
+                     cellText = document.createTextNode("Thursday");
+                    }
+                    if(j==5){
+                      cellText = document.createTextNode("Friday");
+                    }
+                    if(j==6){
+                      cellText = document.createTextNode("Saturday");
+                    }
+                    cell.appendChild(cellText);
+                    row.appendChild(cell);
+                }
+                else{
+                  // Create a <td> element and a text node, make the text
+                  // node the contents of the <td>, and put the <td> at
+                  // the end of the table row
+                var cell2 = document.createElement("td");
+                    var days = weeks[i].getDates();
+                    if(days[j].getMonth() == currentMonth.month){    
+                    var cellText2 = document.createTextNode(days[j].getDate());
+                    cell2.setAttribute("click", clickCell, false);
+                    cell2.setAttribute("style", "cursor: pointer");
+                    cell2.appendChild(cellText2);
+                    row.appendChild(cell2);
+                    
+                    }
+                    else{
+                    var cellText3 = document.createTextNode("");
+                    cell2.appendChild(cellText3);
+                    row.appendChild(cell2); 
+                    }
+                }
+                }
+             
+                // add the row to the end of the table body
+                calendargridBody.appendChild(row);
+            }
+            // put the <thead> in the <table>
+            calendargrid.appendChild(calendargridHead);
+            // put the <tbody> in the <table>
+            calendargrid.appendChild(calendargridBody);
+            // appends <table> into <body>
+            body.appendChild(calendargrid);
+            // sets the border attribute of calendargrid to 3;
+            calendargrid.setAttribute("border", "3");
+            }
 		</script>
 		
         </head>
