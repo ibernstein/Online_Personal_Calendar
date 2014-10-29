@@ -7,7 +7,7 @@
             <link rel="stylesheet" type="text/css" href="cal.css">
             	<script type="text/javascript" src="http://classes.engineering.wustl.edu/cse330/content/calendar.min.js"></script>
 		<script type="text/javascript">
-		    var month = new Array();
+		    var month = [];
 		    month[0] = "January";
 		    month[1] = "February";
 		    month[2] = "March";
@@ -45,8 +45,8 @@
 		    }
 		    function creatingEvent(){
 			document.getElementById("neweventdiv").style.display="block";
-			document.getElementById("addevent").addEventListener("click", function(event){
-			    $cat = null;
+			document.getElementById("addevent").addEventListener("click", function(){
+			    var $cat = null;
 			    if (document.getElementById("workevent").checked) {
 			       $cat = "w"; 
 			    }
@@ -74,53 +74,35 @@
 			    xmlHttp.send(dataString); // Send the data
 			    document.getElementById("neweventdiv").style.display="none";
 			}, false);
-			document.getElementById("cancel").addEventListener("click", function(event){
+			document.getElementById("cancel").addEventListener("click", function(){
 			    document.getElementById("neweventdiv").style.display="none";
 			},false);
 		    }
 		    //If a box is clicked on, give the option to add an event
 		    function clickCell(nameObjects, nameStrings) {
-		    	//set the div innerhtml to be the events from the ajax call back 
-		    	//console.log(cellText.value);
-
-		  //   	var x = document.getElementById("ModifyEventForm");
-				// document.getElementById("ModifyEventForm").style.display="none";
-				// var createform = document.createElement("form"); // Create New Element Form
-				// x.appendChild(createform);
-				// var heading = document.createElement('h2'); // Heading of Form
-				// heading.innerHTML = "Modify Your Events for the Selected Date";
-				// createform.appendChild(heading);
-
-		  //   	var editElement = document.createElement('input');
-				// editElement.setAttribute("type", "submit");
-				// editElement.setAttribute("name", "submit");
-				// editElement.setAttribute("value", "Edit Event");
-				// editElement.addEventListener("click", function(event){
-				// 	//pop up the same form for adding an element and do all the same stuff. fill in the form with the current details by "GET" from the database
-			 //    },false);
-
-				// var deleteelement = document.createElement('input');
-				// deleteelement.setAttribute("type", "submit");
-				// deleteelement.setAttribute("name", "submit");
-				// deleteelement.setAttribute("value", "Delete Event");
-				// editElement.addEventListener("click", function(event){
-				// 	//send to a php to drop from the table 
-			 //    },false);
+		    	console.log(nameObjects);
+			console.log(nameStrings);
 		    }
 		    function checkboxClicked(){
 			var dataString;
+			var xmlHttp = new XMLHttpRequest();
+			var nameObjects = [];
+			var nameStrings = [];
+			var category = "work";
 			if (document.getElementById("work").checked) {
 			    dataString = "category=" + encodeURIComponent("w");
-			    var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+			    xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
 			    xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
 			    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
-			    var nameObjects = [];
-			    var nameStrings = [];
-			    var category = "work";
+			    nameObjects = [];
+			    nameStrings = [];
+			    category = "work";
 			    xmlHttp.addEventListener("load", function(event){
 				var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				for(var i in jsonData){
+				    if(jsonData.hasOwnProperty(i)){
 				    nameStrings.push(i);
+				    }
 				}
 				var keys = Object.keys(jsonData);
 				keys.forEach(function(key){
@@ -140,16 +122,18 @@
 			if(document.getElementById("personal").checked){
 			    dataString = "category=" + encodeURIComponent("p");
 			    console.log("p");
-			    var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+			    xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
 			    xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
 			    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
-			    var nameObjects = [];
-			    var nameStrings = [];
-			    var category = "personal";
+			    nameObjects = [];
+			    nameStrings = [];
+			    category = "personal";
 			    xmlHttp.addEventListener("load", function(event){
 				var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				for(var i in jsonData){
+				    if(jsonData.hasOwnProperty(i)){
 				    nameStrings.push(i);
+				    }
 				}
 				var keys = Object.keys(jsonData);
 				keys.forEach(function(key){
@@ -169,16 +153,18 @@
 			if(document.getElementById("social").checked){
 			    dataString = "category=" + encodeURIComponent("s");
 			    console.log("s");
-			    var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+			    xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
 			    xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
 			    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
-			    var nameObjects = [];
-			    var nameStrings = [];
-			    var category = "social";
+			    nameObjects = [];
+			    nameStrings = [];
+			    category = "social";
 			    xmlHttp.addEventListener("load", function(event){
 				var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				for(var i in jsonData){
-				    nameStrings.push(i);
+				    if(jsonData.hasOwnProperty(i)){
+					nameStrings.push(i);
+				    }
 				}
 				var keys = Object.keys(jsonData);
 				keys.forEach(function(key){
@@ -198,16 +184,18 @@
 			if(document.getElementById("other").checked){
 			    dataString = "category=" + encodeURIComponent("o");
 			    console.log("o");
-			    var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+			    xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
 			    xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
 			    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
-			    var nameObjects = [];
-			    var nameStrings = [];
-			    var category = "other";
+			    nameObjects = [];
+			    nameStrings = [];
+			    category = "other";
 			    xmlHttp.addEventListener("load", function(event){
 				var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				for(var i in jsonData){
-				    nameStrings.push(i);
+				    if(jsonData.hasOwnProperty(i)){
+					nameStrings.push(i);
+				    }
 				}
 				var keys = Object.keys(jsonData);
 				keys.forEach(function(key){
@@ -223,21 +211,27 @@
 		    
 		    function checkingCheckbox(){
 			var dataString;
+			var xmlHttp = new XMLHttpRequest();
+			var nameObjects = [];
+			var nameStrings = [];
+			var category = "";
 			if (!document.getElementById("work").checked && !document.getElementById("personal").checked && !document.getElementById("social").checked && !document.getElementById("other").checked) {
 			    updateCalendar();
 			}else{
 			    if (document.getElementById("work").checked) {
 				dataString = "category=" + encodeURIComponent("w");
-				var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+				xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
 				xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
 				xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
-				var nameObjects = [];
-				var nameStrings = [];
-				var category = "work";
+				nameObjects = [];
+				nameStrings = [];
+				category = "work";
 				xmlHttp.addEventListener("load", function(event){
 				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				    for(var i in jsonData){
-					nameStrings.push(i);
+					if(jsonData.hasOwnProperty(i)){
+					    nameStrings.push(i);
+					}
 				    }
 				    var keys = Object.keys(jsonData);
 				    keys.forEach(function(key){
@@ -255,16 +249,18 @@
 			    if(document.getElementById("personal").checked){
 				dataString = "category=" + encodeURIComponent("p");
 				console.log("p");
-				var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+				xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
 				xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
 				xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
-				var nameObjects = [];
-				var nameStrings = [];
-				var category = "personal";
+				nameObjects = [];
+				nameStrings = [];
+				category = "personal";
 				xmlHttp.addEventListener("load", function(event){
 				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				    for(var i in jsonData){
-					nameStrings.push(i);
+					if(jsonData.hasOwnProperty(i)){
+					    nameStrings.push(i);
+					}
 				    }
 				    var keys = Object.keys(jsonData);
 				    keys.forEach(function(key){
@@ -282,16 +278,18 @@
 			    if(document.getElementById("social").checked){
 				dataString = "category=" + encodeURIComponent("s");
 				console.log("s");
-				var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+				xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
 				xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
 				xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
-				var nameObjects = [];
-				var nameStrings = [];
-				var category = "social";
+				nameObjects = [];
+				nameStrings = [];
+				category = "social";
 				xmlHttp.addEventListener("load", function(event){
 				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				    for(var i in jsonData){
-					nameStrings.push(i);
+					if(jsonData.hasOwnProperty(i)){
+					    nameStrings.push(i);
+					}
 				    }
 				    var keys = Object.keys(jsonData);
 				    keys.forEach(function(key){
@@ -309,16 +307,18 @@
 			    if(document.getElementById("other").checked){
 				dataString = "category=" + encodeURIComponent("o");
 				console.log("o");
-				var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+				xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
 				xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
 				xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
-				var nameObjects = [];
-				var nameStrings = [];
-				var category = "other";
+				nameObjects = [];
+				nameStrings = [];
+				category = "other";
 				xmlHttp.addEventListener("load", function(event){
 				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				    for(var i in jsonData){
-					nameStrings.push(i);
+					if(jsonData.hasOwnProperty(i)){
+					    nameStrings.push(i);
+					}
 				    }
 				    var keys = Object.keys(jsonData);
 				    keys.forEach(function(key){
@@ -337,7 +337,7 @@
 			
 		    }
 		    
-		    function updateCalendarCategory(nameObjects, nameStrings, category){
+		    function updateCalendarCategory(nameObjects, nameStrings/*, category*/){
 			var eventStart = [];
 			for(var q = 0; q < nameObjects.length; q++){
 			    eventStart.push(new Date(nameObjects[q].start));
@@ -352,54 +352,56 @@
 			calendargrid.setAttribute("id","grid");
 			var calendargridHead = document.createElement("thead");
 			var calendargridBody = document.createElement("tbody");
-			var weeks = currentMonth.getWeeks();
+			
 			calendargridHead = document.createTextNode(month[currentMonth.month] + ", " + currentMonth.year);			
 			// creating all cells based on the number of weeks
 			for (var i = -1; i < weeks.length; i++) {
 			    // creates a table row
-			    var row = document.createElement("tr");
-				
+			    var row = document.createElement("tr");	
 			    for (var j = 0; j < 7; j++) {
+				var cellText = "";
+				var cell = "";
 				if(i==-1){
-				    var cell = document.createElement("td");
-				    if(j==0){
-				      var cellText = document.createTextNode("Sunday");
+				    cell = document.createElement("td");
+		
+				    if(j===0){
+				      cellText = document.createTextNode("Sunday");
 				    }
 				    if(j==1){
-				     var cellText = document.createTextNode("Monday");
+					cellText = document.createTextNode("Monday");
 				    }
 				    if(j==2){
-				     var cellText = document.createTextNode("Tuesday");
+					cellText = document.createTextNode("Tuesday");
 				    }
 				    if(j==3){
-				     var cellText = document.createTextNode("Wednesday");
+				     cellText = document.createTextNode("Wednesday");
 				    }
 				    if(j==4){
-				     var cellText = document.createTextNode("Thursday");
+				     cellText = document.createTextNode("Thursday");
 				    }
 				    if(j==5){
-				      var cellText = document.createTextNode("Friday");
+				      cellText = document.createTextNode("Friday");
 				    }
 				    if(j==6){
-				      var cellText = document.createTextNode("Saturday");
+				      cellText = document.createTextNode("Saturday");
 				    }
 				    cell.appendChild(cellText);
 				    row.appendChild(cell);
 				}
-			    else{
-				// Create a <td> element and a text node, make the text
-				// node the contents of the <td>, and put the <td> at
-				// the end of the table row
-				var cell = document.createElement("td");
+				else{
+				    // Create a <td> element and a text node, make the text
+				    // node the contents of the <td>, and put the <td> at
+				    // the end of the table row
+				    cell = document.createElement("td");
 				    var days = weeks[i].getDates();
 				    if(days[j].getMonth() == currentMonth.month){
 					
-					var cellText = document.createTextNode(days[j].getDate());
-					var cellText2 = "";
-					var cellText3 = "";
+					var cellText4 = document.createTextNode(days[j].getDate());
+					var cellText2;
+					var cellText3;
 					cell.setAttribute("click", clickCell(nameObjects, nameStrings), false);//send over objects to outside
 					cell.setAttribute("style", "cursor: pointer");
-					cell.appendChild(cellText);
+					cell.appendChild(cellText4);
 					for(var k = 0; k < eventStart.length; k++){
 					    if(days[j].toDateString() == eventStart[k].toDateString()){
 						var linebreak = document.createElement("br");
@@ -408,7 +410,7 @@
 						cellText3 = document.createTextNode(": " + eventStart[k].toTimeString());
 						/*cellText2.setAttribute("id", "cellText2");
 						cellText3.setAttribute("id", "cellText3");
-
+	
 						if(category=="work"){
 							document.getElementById("cellText2").style.color = "black";
 							document.getElementById("cellText3").style.color = "black";
@@ -429,19 +431,19 @@
 						cell.appendChild(cellText3);
 					    }
 					}   
-					
+					    
 					row.appendChild(cell);
-					
+					    
 				    }
 				    else{
-					var cellText = document.createTextNode("");
+					cellText = document.createTextNode("");
 					cell.appendChild(cellText);
 					row.appendChild(cell); 
 				    }
 				}
 			    }
-			 
-			    // add the row to the end of the table body
+			     
+				// add the row to the end of the table body
 			    calendargridBody.appendChild(row);
 			}
 			// put the <thead> in the <table>
@@ -471,56 +473,56 @@
 			calendargrid.setAttribute("id","grid");
 			var calendargridHead = document.createElement("thead");
 			var calendargridBody = document.createElement("tbody");
-			var weeks = currentMonth.getWeeks();
+			
 			calendargridHead = document.createTextNode(month[currentMonth.month] + ", " + currentMonth.year);			
 			// creating all cells based on the number of weeks
 			for (var i = -1; i < weeks.length; i++) {
 			    // creates a table row
 			    var row = document.createElement("tr");
-				
 			    for (var j = 0; j < 7; j++) {
+				var cell;
+				var cellText;
 				if(i==-1){
-				    var cell = document.createElement("td");
-				    if(j==0){
-				      var cellText = document.createTextNode("Sunday");
+				    cell = document.createElement("td");
+				    if(j===0){
+				      cellText = document.createTextNode("Sunday");
 				    }
 				    if(j==1){
-				     var cellText = document.createTextNode("Monday");
+				     cellText = document.createTextNode("Monday");
 				    }
 				    if(j==2){
-				     var cellText = document.createTextNode("Tuesday");
+				     cellText = document.createTextNode("Tuesday");
 				    }
 				    if(j==3){
-				     var cellText = document.createTextNode("Wednesday");
+				     cellText = document.createTextNode("Wednesday");
 				    }
 				    if(j==4){
-				     var cellText = document.createTextNode("Thursday");
+				     cellText = document.createTextNode("Thursday");
 				    }
 				    if(j==5){
-				      var cellText = document.createTextNode("Friday");
+				      cellText = document.createTextNode("Friday");
 				    }
 				    if(j==6){
-				      var cellText = document.createTextNode("Saturday");
+				      cellText = document.createTextNode("Saturday");
 				    }
 				    cell.appendChild(cellText);
 				    row.appendChild(cell);
 				}
-			    else{
-			    // Create a <td> element and a text node, make the text
-			    // node the contents of the <td>, and put the <td> at
-			    // the end of the table row
-				var cell = document.createElement("td");
+				else{
+				// Create a <td> element and a text node, make the text
+				// node the contents of the <td>, and put the <td> at
+				// the end of the table row
+				    cell = document.createElement("td");
 				    var days = weeks[i].getDates();
 				    if(days[j].getMonth() == currentMonth.month){	
-					var cellText = document.createTextNode(days[j].getDate());
+					cellText = document.createTextNode(days[j].getDate());
 					cell.setAttribute("click", clickCell, false);
 					cell.setAttribute("style", "cursor: pointer");
 					cell.appendChild(cellText);
 					row.appendChild(cell);
-					
 				    }
 				    else{
-					var cellText = document.createTextNode("");
+					cellText = document.createTextNode("");
 					cell.appendChild(cellText);
 					row.appendChild(cell); 
 				    }
