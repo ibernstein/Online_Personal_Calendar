@@ -26,10 +26,10 @@ p {
     color: Indigo;
 }
 
-#fb{
+/*#fb{
     position: absolute;
-    right: 0px;
-}
+    left: 0px;
+}*/
 
 #logout { 
     position: absolute;

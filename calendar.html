@@ -2,7 +2,7 @@
 <!DOCTYPE html>
     <html lang=en>
         <head>
-	    <!--<link rel="shortcut icon" href="/~stephanie/ModFive/favicon.ico" /> NEED TO GET OWN FILE-->
+	    <link rel="shortcut icon" href="/~stephanie/ModFive/favicon.ico" />
             <title>Welcome to Your Calendar</title>
             <link rel="stylesheet" type="text/css" href="cal.css">
             	<script type="text/javascript" src="http://classes.engineering.wustl.edu/cse330/content/calendar.min.js"></script>
@@ -28,13 +28,13 @@
 		    document.addEventListener("DOMContentLoaded", topThreeButtons, false);
 		    function topThreeButtons(){
 			document.getElementById("nextmonth").addEventListener("click", function(event){
-				currentMonth = currentMonth.nextMonth();
-				updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+			    currentMonth = currentMonth.nextMonth();
+			    updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
 			}, false);
 			//change the month when the previous month button is pressed
 			document.getElementById("prevmonth").addEventListener("click", function(event){
-				currentMonth = currentMonth.prevMonth();
-				updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
+			    currentMonth = currentMonth.prevMonth();
+			    updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
 			}, false);
 			//document.getElementById("neweventdiv").style.display="none";
 			document.getElementById("newevent").addEventListener("click", creatingEvent, false);
@@ -46,33 +46,37 @@
 		    function creatingEvent(){
 			document.getElementById("neweventdiv").style.display="block";
 			document.getElementById("addevent").addEventListener("click", function(event){
-			    $cat = null;
-			    if (document.getElementById("workevent").checked) {
-			       $cat = "w"; 
-			    }
-			    else if (document.getElementById("personalevent").checked) {
-			       $cat = "p"; 
-			    }
-			    else if (document.getElementById("socialevent").checked) {
-			       $cat = "s"; 
-			    }
-			    else if (document.getElementById("otherevent").checked) {
-			       $cat = "o"; 
-			    }
-			    var dataString = "name=" + encodeURIComponent(document.getElementById("name").value) + "&start=" + encodeURIComponent(document.getElementById("start").value) + "&end=" + encodeURIComponent(document.getElementById("end").value) + "&cat=" + encodeURIComponent($cat);
-			    var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
-			    xmlHttp.open("POST", "newevent.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
-			    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
-			    xmlHttp.addEventListener("load", function(event){
-				var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
-				if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
-				    alert("Success!");
-				}else{
-				    alert("Event not added because:  "+ jsonData.message);
+			    if(Date(inputelement3) > Date(inputelement2)){
+				alert("The end time must be after start time");
+			    }else{
+				$cat = null;
+				if (document.getElementById("workevent").checked) {
+				   $cat = "w"; 
 				}
-			    }, false); // Bind the callback to the load event
-			    xmlHttp.send(dataString); // Send the data
-			    document.getElementById("neweventdiv").style.display="none";
+				else if (document.getElementById("personalevent").checked) {
+				   $cat = "p"; 
+				}
+				else if (document.getElementById("socialevent").checked) {
+				   $cat = "s"; 
+				}
+				else if (document.getElementById("otherevent").checked) {
+				   $cat = "o"; 
+				}
+				var dataString = "name=" + encodeURIComponent(document.getElementById("name").value) + "&start=" + encodeURIComponent(document.getElementById("start").value) + "&end=" + encodeURIComponent(document.getElementById("end").value) + "&cat=" + encodeURIComponent($cat);
+				var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+				xmlHttp.open("POST", "newevent.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+				xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
+				xmlHttp.addEventListener("load", function(event){
+				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+				    if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+					alert("Success!");
+				    }else{
+					alert("Event not added because:  "+ jsonData.message);
+				    }
+				}, false); // Bind the callback to the load event
+				xmlHttp.send(dataString); // Send the data
+				document.getElementById("neweventdiv").style.display="none";
+			    }	
 			}, false)
 			document.getElementById("cancel").addEventListener("click", function(event){
 			    document.getElementById("neweventdiv").style.display="none";
@@ -340,7 +344,7 @@
 		    function updateCalendarCategory(nameObjects, nameStrings, category){
 			var eventStart = [];
 			for(var q = 0; q < nameObjects.length; q++){
-			    eventStart.push(new Date(nameObjects[q].start));;
+			    eventStart.push(new Date(nameObjects[q].start));
 			}
 			var weeks = currentMonth.getWeeks();
 			// get the reference for the body
@@ -405,8 +409,8 @@
 						var linebreak = document.createElement("br");
 						cell.appendChild(linebreak);
 						cellText2 = document.createTextNode(nameStrings[k]);
-						cellText2.setAttribute("id", "cellText2");
 						cellText3 = document.createTextNode(": " + eventStart[k].toTimeString());
+						/*cellText2.setAttribute("id", "cellText2");
 						cellText3.setAttribute("id", "cellText3");
 
 						if(category=="work"){
@@ -424,7 +428,7 @@
 						else if(category=="social"){
 							document.getElementById("cellText2").style.color = "green";
 							document.getElementById("cellText3").style.color = "green";
-						}
+						}*/
 						cell.appendChild(cellText2);
 						cell.appendChild(cellText3);
 					    }
@@ -506,9 +510,9 @@
 				    row.appendChild(cell);
 				}
 			    else{
-			      // Create a <td> element and a text node, make the text
-			      // node the contents of the <td>, and put the <td> at
-			      // the end of the table row
+			    // Create a <td> element and a text node, make the text
+			    // node the contents of the <td>, and put the <td> at
+			    // the end of the table row
 				var cell = document.createElement("td");
 				    var days = weeks[i].getDates();
 				    if(days[j].getMonth() == currentMonth.month){	
@@ -526,7 +530,6 @@
 				    }
 				}
 			    }
-			 
 			    // add the row to the end of the table body
 			    calendargridBody.appendChild(row);
 			}
@@ -543,6 +546,7 @@
 		
         </head>
         <body>
+	    
 	    <div id="fb-root"></div>
 		<script>(function(d, s, id) {
 		    var js, fjs = d.getElementsByTagName(s)[0];
@@ -552,7 +556,7 @@
 		    fjs.parentNode.insertBefore(js, fjs);
 		}(document, 'script', 'facebook-jssdk'));
 	    </script>
-	    
+	    <div class="fb-like-box" id="fb" data-href="https://www.facebook.com/pages/IsCalendar/465902643549558" data-colorscheme="light" data-show-faces="true" data-header="true" data-stream="false" data-show-border="true"></div>
 	    <div class="main">
 	    <div class="nav">	
 		    <div class="logoutbtn">
@@ -595,6 +599,5 @@
 		    </form>
 		    
 	    </div>
-	    <div class="fb-like-box" id="fb" data-href="https://www.facebook.com/pages/IsCalendar/465902643549558" data-colorscheme="light" data-show-faces="true" data-header="true" data-stream="false" data-show-border="true"></div>
 	    </body>	
 	</html>	
