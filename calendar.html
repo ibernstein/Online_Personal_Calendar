@@ -20,90 +20,13 @@
 		    month[9] = "October";
 		    month[10] = "November";
 		    month[11] = "December";
-		    document.addEventListener("DOMContentLoaded",function(){
-			// get the reference for the body
-			var body = document.getElementsByTagName("body")[0];					  
-			// creates a <table> element and a <tbody> element
-			var calendargrid     = document.createElement("table");
-			calendargrid.setAttribute("id","grid");
-			var calendargridHead = document.createElement("thead");
-			var calendargridBody = document.createElement("tbody");					     
-			calendargridHead = document.createTextNode(month[currentMonth.month] + ", " + currentMonth.year);
-		       
-			// creating all cells
-			for (var i = -1; i < currentMonth.getWeeks().length; i++) {
-			  // creates a table row
-			  var row = document.createElement("tr");
-		       
-			    for (var j = 0; j < 7; j++) {
-				if(i==-1){
-				    var cell = document.createElement("td");
-				     
-				    if(j==0){
-					var cellText = document.createTextNode("Sunday");
-				    }
-				    if(j==1){
-					var cellText = document.createTextNode("Monday");
-				    }
-				    if(j==2){
-					var cellText = document.createTextNode("Tuesday");
-				    }
-				    if(j==3){
-					var cellText = document.createTextNode("Wednesday");
-				    }
-				    if(j==4){
-					var cellText = document.createTextNode("Thursday");
-				    }
-				    if(j==5){
-					var cellText = document.createTextNode("Friday");
-				    }
-				    if(j==6){
-					var cellText = document.createTextNode("Saturday");
-				    }
-				    cell.appendChild(cellText);
-				    row.appendChild(cell);
-				}
-				else{
-				// Create a <td> element and a text node, make the text
-				// node the contents of the <td>, and put the <td> at
-				// the end of the table row
-				var cell = document.createElement("td");
-				var weeks = currentMonth.getWeeks();
-				    var days = weeks[i].getDates();
-					  if(days[j].getMonth() == currentMonth.month){	
-					      var cellText = document.createTextNode(days[j].getDate());
-					      cell.addEventListener("click", clickCell, false);
-    					 cell.setAttribute("style", "cursor: pointer");
-					      cell.appendChild(cellText);
-					      row.appendChild(cell);
-					  }
-					  else{
-					      var cellText = document.createTextNode("");
-					      cell.appendChild(cellText);
-					      row.appendChild(cell); 
-					  }
-			    
-				}
-			    }
-		       
-			    // add the row to the end of the table body
-			    calendargridBody.appendChild(row);
-			}
-			calendargrid.appendChild(calendargridHead);
-			// put the <tbody> in the <table>
-			calendargrid.appendChild(calendargridBody);
-			// appends <table> into <body>
-			body.appendChild(calendargrid);
-			// sets the border attribute of calendargrid to 3;
-			calendargrid.setAttribute("border", "3");
-		    }, false);
-    
-			// For our purposes, we can keep the current month in a variable in the global scope
+		    // For our purposes, we can keep the current month in a variable in the global scope
 		    var currentMonth = new Month(2014, 9); // October 2014
-		    
 		    //firstday = new Day(2014, 9, 1);
+		    document.addEventListener("DOMContentLoaded", updateCalendar, false);
 		    // Change the month when the "next month" button is pressed
-		    document.addEventListener("DOMContentLoaded",function(){
+		    document.addEventListener("DOMContentLoaded", topThreeButtons, false);
+		    function topThreeButtons(){
 			document.getElementById("nextmonth").addEventListener("click", function(event){
 				currentMonth = currentMonth.nextMonth();
 				updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
@@ -113,167 +36,53 @@
 				currentMonth = currentMonth.prevMonth();
 				updateCalendar(); // Whenever the month is updated, we'll need to re-render the calendar in HTML
 			}, false);
-			var x = document.getElementById("newEventForm");
-			document.getElementById("newEventForm").style.display="none";
-			var createform = document.createElement("form"); // Create New Element Form
-			x.appendChild(createform);
-			var heading = document.createElement('h2'); // Heading of Form
-			heading.innerHTML = "Create a New Event";
-			createform.appendChild(heading);
-    
-			var line = document.createElement('hr'); // Giving Horizontal Row After Heading
-			createform.appendChild(line);
-    
-			var linebreak = document.createElement('br');
-			createform.appendChild(linebreak);
-    
-			var titlelabel = document.createElement('label'); // Create Label for Event Title Field
-			titlelabel.innerHTML = "Event Title : "; // Set Field Labels
-			createform.appendChild(titlelabel);
-    
-			var inputelement = document.createElement('input'); // Create Input Field for Event Title
-			inputelement.setAttribute("type", "text");
-			inputelement.setAttribute("name", "name");
-			createform.appendChild(inputelement);
-    
-			var linebreak = document.createElement('br');
-			createform.appendChild(linebreak);
-    
-			var startTimeLabel = document.createElement('label'); // Create bel for Event Title Field
-			startTimeLabel.innerHTML = "Event Start Time : "; // Set Field Labels
-			createform.appendChild(startTimeLabel);
-    
-			var inputelement2 = document.createElement('input'); // Create Input Field for Event Title
-			inputelement2.setAttribute("type", "datetime-local");
-			inputelement2.setAttribute("name", "start");
-			createform.appendChild(inputelement2);
-    
-			var linebreak = document.createElement('br');
-			createform.appendChild(linebreak);
-    
-			var endTimeLabel = document.createElement('label'); // Create abel for Event Title Field
-			endTimeLabel.innerHTML = "Event End Time : "; // Set Field Labels
-			createform.appendChild(endTimeLabel);
-    
-			var inputelement3 = document.createElement('input'); // Create Input Field for Event Title
-			inputelement3.setAttribute("type", "datetime-local");
-			inputelement3.setAttribute("name", "end");
-			createform.appendChild(inputelement3);
-    
-			var linebreak = document.createElement('br');
-			createform.appendChild(linebreak);
-    
-			var catlabel = document.createElement('label'); 
-			catlabel.innerHTML = "Categroy : "; // Set Field Labels
-			createform.appendChild(catlabel);
-    
-			var workLabel = document.createElement('label'); 
-			workLabel.innerHTML = "Work"; 
-			createform.appendChild(workLabel);
-			var inputelement4 = document.createElement('input'); 
-			inputelement4.setAttribute("type", "radio");
-			inputelement4.setAttribute("id", "Work");
-			inputelement4.setAttribute("name", "cat");
-			inputelement4.setAttribute("value", "w");
-			createform.appendChild(inputelement4);
-			var linebreak = document.createElement('br');
-			createform.appendChild(linebreak);
-    
-			var personalLabel = document.createElement('label'); 
-			personalLabel.innerHTML = "Personal"; 
-			createform.appendChild(personalLabel);
-			var inputelement5 = document.createElement('input');
-			inputelement5.setAttribute("type", "radio");
-			inputelement5.setAttribute("id", "Personal");
-			inputelement5.setAttribute("name", "cat");
-			inputelement5.setAttribute("value", "p");
-			createform.appendChild(inputelement5);
-			var linebreak = document.createElement('br');
-			createform.appendChild(linebreak);
-    
-			var socialLabel = document.createElement('label'); 
-			socialLabel.innerHTML = "Social"; 
-			createform.appendChild(socialLabel);
-			var inputelement6 = document.createElement('input'); 
-			inputelement6.setAttribute("type", "radio");
-			inputelement6.setAttribute("id", "Social");
-			inputelement6.setAttribute("name", "cat");
-			inputelement6.setAttribute("value", "s");
-			createform.appendChild(inputelement6);
-			var linebreak = document.createElement('br');
-			createform.appendChild(linebreak);
-    
-			var otherLabel = document.createElement('label'); 
-			otherLabel.innerHTML = "Other"; 
-			createform.appendChild(otherLabel);
-			var inputelement7 = document.createElement('input'); 
-			inputelement7.setAttribute("type", "radio");
-			inputelement7.setAttribute("id", "Other");
-			inputelement7.setAttribute("name", "cat");
-			inputelement7.setAttribute("value", "o");
-			createform.appendChild(inputelement7);
-			var linebreak = document.createElement('br');
-			createform.appendChild(linebreak);
-			var submitelement = document.createElement('input');
-			// Append Submit Button
-			submitelement.setAttribute("type", "submit");
-			submitelement.setAttribute("name", "submit");
-			submitelement.setAttribute("value", "Add Event");
-			var cancelelement = document.createElement('input');
-			// Append Cancel Button
-			cancelelement.setAttribute("type", "submit");
-			cancelelement.setAttribute("name", "submit");
-			cancelelement.setAttribute("value", "Cancel");
-			createform.appendChild(linebreak);
-			document.getElementById("newevent").addEventListener("click", function(event){
-			    document.getElementById("newEventForm").style.display="block";
-			    submitelement.addEventListener("click", function(event){
-				$cat = null;
-				if (document.getElementById("Work").checked) {
-				   $cat = "w"; 
+			//document.getElementById("neweventdiv").style.display="none";
+			document.getElementById("newevent").addEventListener("click", creatingEvent, false);
+		    }
+		    function creatingEvent(){
+			document.getElementById("neweventdiv").style.display="block";
+			document.getElementById("addevent").addEventListener("click", function(event){
+			    $cat = null;
+			    if (document.getElementById("Work").checked) {
+			       $cat = "w"; 
+			    }
+			    else if (document.getElementById("Personal").checked) {
+			       $cat = "p"; 
+			    }
+			    else if (document.getElementById("Social").checked) {
+			       $cat = "s"; 
+			    }
+			    else if (document.getElementById("Other").checked) {
+			       $cat = "o"; 
+			    }
+			    var dataString = "name=" + encodeURIComponent(inputelement.value) + "&start=" + encodeURIComponent(inputelement2.value) + "&end=" + encodeURIComponent(inputelement3.value) + "&cat=" + encodeURIComponent($cat);
+				
+			    var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+			    xmlHttp.open("POST", "newevent.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+			    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
+			    xmlHttp.addEventListener("load", function(event){
+				var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+				if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+				    alert("Success!");
+				}else{
+				    alert("Event not added because:  "+ jsonData.message);
 				}
-				else if (document.getElementById("Personal").checked) {
-				   $cat = "p"; 
-				}
-				else if (document.getElementById("Social").checked) {
-				   $cat = "s"; 
-				}
-				else if (document.getElementById("Other").checked) {
-				   $cat = "o"; 
-				}
-				var dataString = "name=" + encodeURIComponent(inputelement.value) + "&start=" + encodeURIComponent(inputelement2.value) + "&end=" + encodeURIComponent(inputelement3.value) + "&cat=" + encodeURIComponent($cat);
-
-				//alert(dataString);
-				var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
-				xmlHttp.open("POST", "newevent.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
-				xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
-				xmlHttp.addEventListener("load", function(event){
-				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
-				    if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
-					alert("Success!");
-				    }else{
-					alert("Event not added because:  "+ jsonData.message);
-				    }
-				}, false); // Bind the callback to the load event
-				xmlHttp.send(dataString); // Send the data
-				document.getElementById("newEventForm").style.display="none";
-			    })
-			    cancelelement.addEventListener("click", function(event){
-				document.getElementById("newEventForm").style.display="none";
-			    },false);
-			    createform.appendChild(submitelement);
-			    createform.appendChild(cancelelement);
-			}, false);
-			
+			    }, false); // Bind the callback to the load event
+			    xmlHttp.send(dataString); // Send the data
+			    document.getElementById("neweventdiv").style.display="none";
+			}, false)
+			cancelelement.addEventListener("click", function(event){
+			    document.getElementById("neweventdiv").style.display="none";
+			},false);
 			document.getElementById("work").addEventListener("change",checkboxClicked, false);
 			document.getElementById("personal").addEventListener("change",checkboxClicked, false);
 			document.getElementById("social").addEventListener("change",checkboxClicked, false);
 			document.getElementById("other").addEventListener("change",checkboxClicked, false);
-		    }, false);	
+		    }
 		    //If a box is clicked on, give the option to add an event
-		    function clickCell() {
+		    function clickCell(nameObjects, nameStrings) {
 		    	//set the div innerhtml to be the events from the ajax call back 
-		    	console.log(cellText.value);
+		    	//console.log(cellText.value);
 
 		  //   	var x = document.getElementById("ModifyEventForm");
 				// document.getElementById("ModifyEventForm").style.display="none";
@@ -581,7 +390,7 @@
 					var cellText = document.createTextNode(days[j].getDate());
 					var cellText2 = "";
 					var cellText3 = "";
-					cell.setAttribute("click", clickCell, false);//send over objects to outside
+					cell.setAttribute("click", clickCell(nameObjects, nameStrings), false);//send over objects to outside
 					cell.setAttribute("style", "cursor: pointer");
 					cell.appendChild(cellText);
 					for(var k = 0; k < eventStart.length; k++){
@@ -678,7 +487,7 @@
 				    var days = weeks[i].getDates();
 				    if(days[j].getMonth() == currentMonth.month){	
 					var cellText = document.createTextNode(days[j].getDate());
-					cell.setAttribute("onclick", clickCell, false);
+					cell.setAttribute("click", clickCell, false);
 					cell.setAttribute("style", "cursor: pointer");
 					cell.appendChild(cellText);
 					row.appendChild(cell);
@@ -723,7 +532,21 @@
 			<button id = "newevent">Create a new event</button>
 		</div>
 		<p id="instructions">Click on a date below to see the events on that day</p>
-		<div id="newEventForm">
+		<div id="neweventdiv" style="display: none">
+		    <form id="neweventform">
+			<h2>Create a New Event</h2>
+			<hr></hr><br>
+			Event Title:<input type="text" name="name" id="name"><br>
+			Event Start Time:<input type="datetime-local" name="start" id="start"><br>
+			Event End Time:<input type="datetime-local" name="end" id="end"><br>
+			Category:<br>
+			Work:<input type="radio" id="work" name="cat" value="w"><br>
+			Personal:<input type="radio" id="personal" name="cat" value="p"><br>
+			Social:<input type="radio" id="social" name="cat" value="s"><br>
+			Other:<input type="radio" id="other" name="cat" value="o"><br>
+			<button id="addevent" name="addevent">Add Event</button>
+			<button id="cancel" name="cancel">Cancel Event</button>
+		    </form> 
 		</div>
 		<div id="ModifyEventForm">
 		</div>
