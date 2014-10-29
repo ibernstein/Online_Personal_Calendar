@@ -44,10 +44,10 @@
 			document.getElementById("other").addEventListener("change", checkboxClicked, false);
 			document.getElementById("addevent").addEventListener("click", addingEvent, false);
 			document.getElementById("cancel").addEventListener("click", function(){
-			    document.getElementById("neweventdiv").style.display="none";
-			    document.getElementById("name").value = "";
-			    document.getElementById("start").value = "";
-			    document.getElementById("end").value = "";
+			document.getElementById("neweventdiv").style.display="none";
+			document.getElementById("name").value = "";
+			document.getElementById("start").value = "";
+			document.getElementById("end").value = "";
 			},false);
 		    }
 		    function creatingEvent(){
@@ -116,11 +116,6 @@
 				    nameObjects.push(jsonData[key]);
 				});
 				updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
-				/*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
-				    alert("Success!");
-				}else{
-				    alert("Event not added because:  "+ jsonData.message);
-				}*/
 			    }, false); // Bind the callback to the load event
 			    xmlHttp.send(dataString); // Send the data
 			}else{
@@ -147,11 +142,6 @@
 				    nameObjects.push(jsonData[key]);
 				});
 				updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
-				/*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
-				    alert("Success!");
-				}else{
-				    alert("Event not added because:  "+ jsonData.message);
-				}*/
 			    }, false); // Bind the callback to the load event
 			    xmlHttp.send(dataString); // Send the data
 			}else{
@@ -178,11 +168,6 @@
 				    nameObjects.push(jsonData[key]);
 				});
 				updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
-				/*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
-				    alert("Success!");
-				}else{
-				    alert("Event not added because:  "+ jsonData.message);
-				}*/
 			    }, false); // Bind the callback to the load event
 			    xmlHttp.send(dataString); // Send the data
 			}else{
@@ -236,20 +221,15 @@
 				xmlHttp.addEventListener("load", function(event){
 				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				    for(var i in jsonData){
-					if(jsonData.hasOwnProperty(i)){
-					    nameStrings.push(i);
-					}
+						if(jsonData.hasOwnProperty(i)){
+					    	nameStrings.push(i);
+						}
 				    }
 				    var keys = Object.keys(jsonData);
 				    keys.forEach(function(key){
 					nameObjects.push(jsonData[key]);
 				    });
-				    updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
-				    /*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
-					alert("Success!");
-				    }else{
-					alert("Event not added because:  "+ jsonData.message);
-				    }*/
+				    updateCalendarCategory(nameObjects, nameStrings); 
 				}, false); // Bind the callback to the load event
 				xmlHttp.send(dataString); // Send the data
 			    }
@@ -265,20 +245,15 @@
 				xmlHttp.addEventListener("load", function(event){
 				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				    for(var i in jsonData){
-					if(jsonData.hasOwnProperty(i)){
-					    nameStrings.push(i);
-					}
+						if(jsonData.hasOwnProperty(i)){
+					  	  nameStrings.push(i);
+						}
 				    }
 				    var keys = Object.keys(jsonData);
 				    keys.forEach(function(key){
 					nameObjects.push(jsonData[key]);
 				    });
-				    updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
-				    /*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
-					alert("Success!");
-				    }else{
-					alert("Event not added because:  "+ jsonData.message);
-				    }*/
+				    updateCalendarCategory(nameObjects, nameStrings); 
 				}, false); // Bind the callback to the load event
 				xmlHttp.send(dataString); // Send the data
 			    }
@@ -286,7 +261,7 @@
 				dataString = "category=" + encodeURIComponent("s");
 				console.log("s");
 				xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
-				xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+				xmlHttp.open("POST", "eventQuery.php", true); 
 				xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
 				nameObjects = [];
 				nameStrings = [];
@@ -294,20 +269,15 @@
 				xmlHttp.addEventListener("load", function(event){
 				    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
 				    for(var i in jsonData){
-					if(jsonData.hasOwnProperty(i)){
-					    nameStrings.push(i);
-					}
+						if(jsonData.hasOwnProperty(i)){
+					    	nameStrings.push(i);
+						}
 				    }
 				    var keys = Object.keys(jsonData);
 				    keys.forEach(function(key){
 					nameObjects.push(jsonData[key]);
 				    });
-				    updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
-				    /*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
-					alert("Success!");
-				    }else{
-					alert("Event not added because:  "+ jsonData.message);
-				    }*/
+				    updateCalendarCategory(nameObjects, nameStrings);
 				}, false); // Bind the callback to the load event
 				xmlHttp.send(dataString); // Send the data
 			    }
@@ -315,8 +285,8 @@
 				dataString = "category=" + encodeURIComponent("o");
 				console.log("o");
 				xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
-				xmlHttp.open("POST", "eventQuery.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
-				xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// It's easy to forget this line for POST requests
+				xmlHttp.open("POST", "eventQuery.php", true); 
+				xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 				nameObjects = [];
 				nameStrings = [];
 				category = "other";
@@ -331,12 +301,7 @@
 				    keys.forEach(function(key){
 					nameObjects.push(jsonData[key]);
 				    });
-				    updateCalendarCategory(nameObjects, nameStrings); // Whenever the month is updated, we'll need to re-render the calendar in HTML
-				    /*if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
-					alert("Success!");
-				    }else{
-					alert("Event not added because:  "+ jsonData.message);
-				    }*/
+				    updateCalendarCategory(nameObjects, nameStrings); 
 				}, false); // Bind the callback to the load event
 				xmlHttp.send(dataString); // Send the data
 			    }
@@ -350,11 +315,9 @@
 			    eventStart.push(new Date(nameObjects[q].start));
 			}
 			var weeks = currentMonth.getWeeks();
-			// get the reference for the body
 			var body = document.getElementsByTagName("body")[0];
 			//if there is already a calendar grid there, remove it
 			if (document.getElementById("grid")) document.getElementById("grid").remove();
-			// creates a <table> element and a <tbody> element
 			var calendargrid = document.createElement("table");
 			calendargrid.setAttribute("id","grid");
 			var calendargridHead = document.createElement("thead");
@@ -396,9 +359,6 @@
 				    row.appendChild(cell);
 				}
 				else{
-				    // Create a <td> element and a text node, make the text
-				    // node the contents of the <td>, and put the <td> at
-				    // the end of the table row
 				    cell = document.createElement("td");
 				    var days = weeks[i].getDates();
 				    if(days[j].getMonth() == currentMonth.month){
@@ -415,32 +375,11 @@
 						cell.appendChild(linebreak);
 						cellText2 = document.createTextNode(nameStrings[k]);
 						cellText3 = document.createTextNode(": " + eventStart[k].toTimeString());
-						/*cellText2.setAttribute("id", "cellText2");
-						cellText3.setAttribute("id", "cellText3");
-	
-						if(category=="work"){
-							document.getElementById("cellText2").style.color = "black";
-							document.getElementById("cellText3").style.color = "black";
-						}
-						else if(category=="personal"){
-							document.getElementById("cellText2").style.color = "magenta";
-							document.getElementById("cellText3").style.color = "magenta";
-						}
-						else if(category=="other"){
-							document.getElementById("cellText2").style.color = "red";
-							document.getElementById("cellText3").style.color = "red";
-						}
-						else if(category=="social"){
-							document.getElementById("cellText2").style.color = "green";
-							document.getElementById("cellText3").style.color = "green";
-						}*/
 						cell.appendChild(cellText2);
 						cell.appendChild(cellText3);
 					    }
 					}   
-					    
 					row.appendChild(cell);
-					    
 				    }
 				    else{
 					cellText = document.createTextNode("");
@@ -449,33 +388,24 @@
 				    }
 				}
 			    }
-			     
-				// add the row to the end of the table body
 			    calendargridBody.appendChild(row);
 			}
-			// put the <thead> in the <table>
 			calendargrid.appendChild(calendargridHead);
-			// put the <tbody> in the <table>
 			calendargrid.appendChild(calendargridBody);
-			// appends <table> into <body>
 			body.appendChild(calendargrid);
-			// sets the border attribute of calendargrid to 3;
 			calendargrid.setAttribute("border", "3");
 		    }
-		    // This updateCalendar() function only alerts the dates in the currently specified month.  You need to write
-		    // it to modify the DOM (optionally using jQuery) to display the days and weeks in the current month.
+
 		    function updateCalendar(){
 			document.getElementById("work").checked = false;
 			document.getElementById("personal").checked = false;
 			document.getElementById("social").checked = false;
 			document.getElementById("other").checked = false;
 			var weeks = currentMonth.getWeeks();
-			// get the reference for the body
 			var body = document.getElementsByTagName("body")[0];
 			//if there is already a calendar grid there, remove it
 			if (document.getElementById("grid")) document.getElementById("grid").remove();
     
-			// creates a <table> element and a <tbody> element
 			var calendargrid = document.createElement("table");
 			calendargrid.setAttribute("id","grid");
 			var calendargridHead = document.createElement("thead");
@@ -516,9 +446,6 @@
 				    row.appendChild(cell);
 				}
 				else{
-				// Create a <td> element and a text node, make the text
-				// node the contents of the <td>, and put the <td> at
-				// the end of the table row
 				    cell = document.createElement("td");
 				    var days = weeks[i].getDates();
 				    if(days[j].getMonth() == currentMonth.month){	
@@ -535,23 +462,16 @@
 				    }
 				}
 			    }
-			    // add the row to the end of the table body
 			    calendargridBody.appendChild(row);
 			}
-			// put the <thead> in the <table>
 			calendargrid.appendChild(calendargridHead);
-			// put the <tbody> in the <table>
 			calendargrid.appendChild(calendargridBody);
-			// appends <table> into <body>
 			body.appendChild(calendargrid);
-			// sets the border attribute of calendargrid to 3;
 			calendargrid.setAttribute("border", "3");
 		    }
 		</script>
-		
         </head>
         <body>
-	    
 	    <div id="fb-root"></div>
 		<script>(function(d, s, id) {
 		    var js, fjs = d.getElementsByTagName(s)[0];
@@ -597,8 +517,7 @@
 			<input type="checkbox" name="categories" id="personal" value="p">Personal
 			<input type="checkbox" name="categories" id="social" value="s">Social
 			<input type="checkbox" name="categories" id="other" value="o">Other
-		    </form>
-		    
+		    </form>   
 	    </div>
 	    </body>	
 	</html>	
