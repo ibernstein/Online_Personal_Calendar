@@ -373,10 +373,15 @@
 					    if(days[j].toDateString() == eventStart[k].toDateString()){
 						var linebreak = document.createElement("br");
 						cell.appendChild(linebreak);
-						cellText2 = document.createTextNode(nameStrings[k]);
-						cellText3 = document.createTextNode(": " + eventStart[k].toTimeString());
+						cellText2 = document.createElement("textarea");
+						cellText2.innerHTML = (nameStrings[k]);
+						cellText3 = document.createElement("textarea");
+						cellText3.innerHTML = (": " + eventStart[k].toTimeString());
+						deleteButton = document.createElement("button");
+						deleteButton.innerHTML = "Delete Event";
 						cell.appendChild(cellText2);
 						cell.appendChild(cellText3);
+						cell.appendChild(deleteButton);
 					    }
 					}   
 					row.appendChild(cell);
@@ -395,6 +400,7 @@
 			body.appendChild(calendargrid);
 			calendargrid.setAttribute("border", "3");
 		    }
+		   
 
 		    function updateCalendar(){
 			document.getElementById("work").checked = false;
