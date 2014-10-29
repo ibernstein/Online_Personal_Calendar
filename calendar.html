@@ -42,41 +42,48 @@
 			document.getElementById("personal").addEventListener("change", checkboxClicked, false);
 			document.getElementById("social").addEventListener("change", checkboxClicked, false);
 			document.getElementById("other").addEventListener("change", checkboxClicked, false);
+			document.getElementById("addevent").addEventListener("click", addingEvent, false);
+			document.getElementById("cancel").addEventListener("click", function(){
+			    document.getElementById("neweventdiv").style.display="none";
+			    document.getElementById("name").value = "";
+			    document.getElementById("start").value = "";
+			    document.getElementById("end").value = "";
+			},false);
 		    }
 		    function creatingEvent(){
 			document.getElementById("neweventdiv").style.display="block";
-			document.getElementById("addevent").addEventListener("click", function(){
-			    var $cat = null;
-			    if (document.getElementById("workevent").checked) {
-			       $cat = "w"; 
+		    }	
+		    function addingEvent(){
+			var $cat = null;
+			if (document.getElementById("workevent").checked) {
+			   $cat = "w"; 
+			}
+			else if (document.getElementById("personalevent").checked) {
+			   $cat = "p"; 
+			}
+			else if (document.getElementById("socialevent").checked) {
+			   $cat = "s"; 
+			}
+			else if (document.getElementById("otherevent").checked) {
+			   $cat = "o"; 
+			}
+			var dataString = "name=" + encodeURIComponent(document.getElementById("name").value) + "&start=" + encodeURIComponent(document.getElementById("start").value) + "&end=" + encodeURIComponent(document.getElementById("end").value) + "&cat=" + encodeURIComponent($cat);
+			var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+			xmlHttp.open("POST", "newevent.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+			xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
+			xmlHttp.addEventListener("load", function(event){
+			    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+			    if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+				alert("Success!");
+			    }else{
+				alert("Event not added because:  "+ jsonData.message);
 			    }
-			    else if (document.getElementById("personalevent").checked) {
-			       $cat = "p"; 
-			    }
-			    else if (document.getElementById("socialevent").checked) {
-			       $cat = "s"; 
-			    }
-			    else if (document.getElementById("otherevent").checked) {
-			       $cat = "o"; 
-			    }
-			    var dataString = "name=" + encodeURIComponent(document.getElementById("name").value) + "&start=" + encodeURIComponent(document.getElementById("start").value) + "&end=" + encodeURIComponent(document.getElementById("end").value) + "&cat=" + encodeURIComponent($cat);
-			    var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
-			    xmlHttp.open("POST", "newevent.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
-			    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
-			    xmlHttp.addEventListener("load", function(event){
-				var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
-				if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
-				    alert("Success!");
-				}else{
-				    alert("Event not added because:  "+ jsonData.message);
-				}
-			    }, false); // Bind the callback to the load event
-			    xmlHttp.send(dataString); // Send the data
-			    document.getElementById("neweventdiv").style.display="none";
-			}, false);
-			document.getElementById("cancel").addEventListener("click", function(){
-			    document.getElementById("neweventdiv").style.display="none";
-			},false);
+			}, false); // Bind the callback to the load event
+			xmlHttp.send(dataString); // Send the data
+			document.getElementById("neweventdiv").style.display="none";
+			document.getElementById("name").value = "";
+			document.getElementById("start").value = "";
+			document.getElementById("end").value = "";
 		    }
 		    //If a box is clicked on, give the option to add an event
 		    function clickCell(nameObjects, nameStrings) {
@@ -572,20 +579,18 @@
 		    </div>
 		    <p id="instructions">Click on a date below to see the events on that day</p>
 		    <div id="neweventdiv" style="display: none">
-			<form id="neweventform">
-			    <h2>Create a New Event</h2>
-			    <hr></hr><br>
-			    Event Title:<input type="text" name="name" id="name"><br>
-			    Event Start Time:<input type="datetime-local" name="start" id="start"><br>
-			    Event End Time:<input type="datetime-local" name="end" id="end"><br>
-			    Category:<br>
-			    Work:<input type="radio" id="workevent" name="cat" value="w"><br>
-			    Personal:<input type="radio" id="personalevent" name="cat" value="p"><br>
-			    Social:<input type="radio" id="socialevent" name="cat" value="s"><br>
-			    Other:<input type="radio" id="otherevent" name="cat" value="o"><br>
-			    <button id="addevent">Add Event</button>
-			    <button id="cancel">Cancel Event</button>
-			</form> 
+			<h2>Create a New Event</h2>
+			<hr></hr><br>
+			Event Title:<input type="text" name="name" id="name"><br>
+			Event Start Time:<input type="datetime-local" name="start" id="start"><br>
+			Event End Time:<input type="datetime-local" name="end" id="end"><br>
+			Category:<br>
+			Work:<input type="radio" id="workevent" name="cat" value="w"><br>
+			Personal:<input type="radio" id="personalevent" name="cat" value="p"><br>
+			Social:<input type="radio" id="socialevent" name="cat" value="s"><br>
+			Other:<input type="radio" id="otherevent" name="cat" value="o"><br>
+			<button id="addevent">Add Event</button>
+			<button id="cancel">Cancel Event</button>
 		    </div>
 		    <form>
 			<input type="checkbox" name="categories" id="work" value="w">Work
