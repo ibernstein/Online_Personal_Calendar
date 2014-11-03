@@ -1,8 +1,8 @@
 Stephanie Mertz		431092
 Ian Bernstein 		431492
 
- 
-http://ec2-54-69-97-64.us-west-2.compute.amazonaws.com/~stephanie/ModFive/
+http://ec2-54-69-241-236.us-west-2.compute.amazonaws.com/~ibernstein/Module_5/login.php
+(This is changed to give you the correct URL, we gave the info to wrong group memebers ec2 instance originally, this is the only change to the document)
 
 
 	 	  - Bootstrap was used for the login page
